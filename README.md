@@ -1,1 +1,1 @@
-# tipcc.js
+"# tip.cc API Client"
