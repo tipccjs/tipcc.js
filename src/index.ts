@@ -7,8 +7,6 @@ import {
   APIRESTGetWallets,
   APIRESTPostTipPayload,
   APIRESTPostTips,
-  ApiTransaction,
-  ApiWallet,
 } from './types/TipccApi';
 import Transaction from './structures/Transaction';
 import {
@@ -27,6 +25,9 @@ interface Events {
   ready: void;
 }
 
+/**
+ * A tip.cc client to interact with the API.
+ */
 export default class TipccClient extends EventEmitter {
   public token: string;
 
@@ -108,7 +109,7 @@ export default class TipccClient extends EventEmitter {
             `Failed ${this.pollingRetries} consecutive API polls. Is the API responding?`,
           );
       }
-    } while(!transactions);
+    } while (!transactions);
 
     // Reset pollingRetries, as it should only increment if multiple consecutive requests don't succeed
     if (this.pollingRetries > 0) this.pollingRetries = 0;

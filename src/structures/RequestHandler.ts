@@ -1,6 +1,9 @@
 import axios, { AxiosRequestConfig, RawAxiosResponseHeaders } from 'axios';
 import Bucket from '../utils/Bucket';
 
+/**
+ * A handler used for HTTP requests.
+ */
 export default class RequestHandler {
   private _apiBaseUrl: string;
 
@@ -12,6 +15,11 @@ export default class RequestHandler {
 
   private _requestOptions: AxiosRequestConfig;
 
+  /**
+   * Create a RequestHandler.
+   * @param apiKey The tip.cc API key
+   * @param payload Optional: options for requests
+   */
   constructor(
     apiKey: string,
     payload: {

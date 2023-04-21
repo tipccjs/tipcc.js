@@ -1,6 +1,9 @@
 import { ApiWallet } from '../types/TipccApi';
 import Amount from './Amount';
 
+/**
+ * A class for storing an API wallet.
+ */
 export default class Wallet {
   public code: string;
 
@@ -10,6 +13,10 @@ export default class Wallet {
 
   public usdValue: Amount | null = null;
 
+  /**
+   * Create a Wallet.
+   * @param payload The wallet from the API
+   */
   constructor(payload: ApiWallet) {
     this.code = payload.code;
     this.name = payload.name;

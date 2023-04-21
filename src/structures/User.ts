@@ -1,5 +1,8 @@
 import { ApiUser } from '../types/TipccApi';
 
+/**
+ * A class for storing an API user.
+ */
 export default class User {
   public identifier: string;
 
@@ -9,6 +12,10 @@ export default class User {
 
   public service: 'discord';
 
+  /**
+   * Create a User.
+   * @param payload The user from the API
+   */
   constructor(payload: ApiUser) {
     this.identifier = payload.identifier;
     this.username = payload.username;
