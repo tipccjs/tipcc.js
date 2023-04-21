@@ -1,1 +1,1 @@
-"# tip.cc API Client"
+# tip.cc API Client
