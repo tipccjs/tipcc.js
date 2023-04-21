@@ -1,9 +1,9 @@
-import TipccClient from '../..';
-import CryptoCurrency from '../../structures/CryptoCurrency';
+import TipccClient from '../';
+import CryptoCurrency from '../structures/CryptoCurrency';
 import {
   APIRESTGetCurrenciesCryptocurrencies,
   APIRESTGetCurrentciesFiats,
-} from '../../types/TipccApi';
+} from '../types/TipccApi';
 
 const cryptoCurrenciesCache: CryptoCurrency[] = [];
 const fiatCurrenciesCache: CryptoCurrency[] = [];
