@@ -36,9 +36,13 @@ export default class TipccClient extends EventEmitter {
 
   public pollingInterval = 10000;
 
+  public maxRetries = 5;
+
   private polling = new Set();
 
   private pollingTimeout: NodeJS.Timeout | null = null;
+
+  private pollingRetries = 0;
 
   private lastPoll = new Date();
 
@@ -47,6 +51,7 @@ export default class TipccClient extends EventEmitter {
     options: {
       baseUrl?: string;
       pollingInterval?: number;
+      maxRetries?: number;
     } = {},
   ) {
     super();
@@ -60,6 +65,7 @@ export default class TipccClient extends EventEmitter {
     });
 
     if (options.pollingInterval) this.pollingInterval = options.pollingInterval;
+    if (options.maxRetries) this.maxRetries = options.maxRetries;
 
     Promise.all([
       updateCurrenciesCache(this),
@@ -72,15 +78,32 @@ export default class TipccClient extends EventEmitter {
 
   private async _poll(): Promise<void> {
     const now = new Date();
-    const { transactions } = (await this.REST.request(
-      'GET',
-      '/account/transactions',
-      {
+    let transactions;
+
+    // Retry until a successful reponse is received or max retries are reached
+    while (transactions === undefined) {
+      try {
+        transactions = (
+          (await this.REST.request('GET', '/account/transactions', {
         types: [...this.polling],
         since: this.lastPoll.toISOString(),
         until: now.toISOString(),
-      },
-    )) as APIRESTGetAccountTransactions;
+          })) as APIRESTGetAccountTransactions
+        ).transactions;
+
+        break;
+      } catch {
+        this.pollingRetries += 1;
+
+        if (this.pollingRetries >= this.maxRetries)
+          throw new Error(
+            `Failed ${this.pollingRetries} consecutive API polls. Is the API responding?`,
+          );
+      }
+    }
+
+    // Reset pollingRetries, as it should only increment if multiple consecutive requests don't succeed
+    if (this.pollingRetries > 0) this.pollingRetries = 0;
 
     for (const transaction of transactions) {
       if (!getCachedCryptoCurrency(transaction.amount.currency))
