@@ -36,17 +36,27 @@ export default class TipccClient extends EventEmitter {
 
   public pollingInterval = 10000;
 
+  public maxRetries = 5;
+
   private polling = new Set();
 
   private pollingTimeout: NodeJS.Timeout | null = null;
 
+  private pollingRetries = 0;
+
   private lastPoll = new Date();
 
+  /**
+   * Create a tip.cc client.
+   * @param token The tip.cc API token to use
+   * @param options Optional options
+   */
   constructor(
     token: string,
     options: {
       baseUrl?: string;
       pollingInterval?: number;
+      maxRetries?: number;
     } = {},
   ) {
     super();
@@ -60,6 +70,7 @@ export default class TipccClient extends EventEmitter {
     });
 
     if (options.pollingInterval) this.pollingInterval = options.pollingInterval;
+    if (options.maxRetries) this.maxRetries = options.maxRetries;
 
     Promise.all([
       updateCurrenciesCache(this),
@@ -70,17 +81,37 @@ export default class TipccClient extends EventEmitter {
     });
   }
 
+  /**
+   * Poll the tip.cc API for new data.
+   */
   private async _poll(): Promise<void> {
     const now = new Date();
-    const { transactions } = (await this.REST.request(
-      'GET',
-      '/account/transactions',
-      {
-        types: [...this.polling],
-        since: this.lastPoll.toISOString(),
-        until: now.toISOString(),
-      },
-    )) as APIRESTGetAccountTransactions;
+    let transactions;
+
+    // Retry until a successful reponse is received or max retries are reached
+    do {
+      try {
+        transactions = (
+          (await this.REST.request('GET', '/account/transactions', {
+            types: [...this.polling],
+            since: this.lastPoll.toISOString(),
+            until: now.toISOString(),
+          })) as APIRESTGetAccountTransactions
+        ).transactions;
+
+        break;
+      } catch {
+        this.pollingRetries += 1;
+
+        if (this.pollingRetries >= this.maxRetries)
+          throw new Error(
+            `Failed ${this.pollingRetries} consecutive API polls. Is the API responding?`,
+          );
+      }
+    } while(!transactions);
+
+    // Reset pollingRetries, as it should only increment if multiple consecutive requests don't succeed
+    if (this.pollingRetries > 0) this.pollingRetries = 0;
 
     for (const transaction of transactions) {
       if (!getCachedCryptoCurrency(transaction.amount.currency))
@@ -117,6 +148,10 @@ export default class TipccClient extends EventEmitter {
     return this;
   }
 
+  /**
+   * Get a list of cryptocurrencies.
+   * @param cache Whether to use the cache (`true` by default)
+   */
   public async getCryptoCurrencies(cache = true): Promise<CryptoCurrency[]> {
     const currencies = getCachedCryptoCurrencies();
     if (currencies.length > 0 && cache) return currencies;
@@ -124,6 +159,10 @@ export default class TipccClient extends EventEmitter {
     return getCachedCryptoCurrencies();
   }
 
+  /**
+   * Get a list of fiat currencies.
+   * @param cache Whether to use the cache (`true` by default)
+   */
   public async getFiatCurrencies(cache = true): Promise<CryptoCurrency[]> {
     const currencies = getCachedCryptoCurrencies();
     if (currencies.length > 0 && cache) return currencies;
@@ -131,6 +170,10 @@ export default class TipccClient extends EventEmitter {
     return getCachedCryptoCurrencies();
   }
 
+  /**
+   * Get a list of transactions based on options.
+   * @param options Which options to use when requesting transactions
+   */
   public async getTransactions(
     options: {
       types?: string[];
@@ -148,6 +191,9 @@ export default class TipccClient extends EventEmitter {
     return transactions.map((t) => new Transaction(t));
   }
 
+  /**
+   * Get a list of exchange rates.
+   */
   public async getExchangeRates(): Promise<ExchangeRate[]> {
     const { rates } = (await this.REST.request(
       'GET',
@@ -156,6 +202,10 @@ export default class TipccClient extends EventEmitter {
     return rates.map((r) => new ExchangeRate(r));
   }
 
+  /**
+   * Get a single transaction.
+   * @param id The transaction id
+   */
   public async getTransaction(id: string): Promise<Transaction | null> {
     const { transaction } = (await this.REST.request(
       'GET',
@@ -165,6 +215,10 @@ export default class TipccClient extends EventEmitter {
     return new Transaction(transaction);
   }
 
+  /**
+   * Post a new tip.
+   * @param payload The post tip payload
+   */
   public async postTip(
     payload: APIRESTPostTipPayload,
   ): Promise<APIRESTPostTips> {
@@ -175,6 +229,11 @@ export default class TipccClient extends EventEmitter {
     )) as APIRESTPostTips;
   }
 
+  /**
+   * Get a single wallet.
+   * @param currency The wallet currency
+   * @param fallback Whether to create an empty wallet if there's no API response
+   */
   public async getWallet(
     currency: string,
     fallback = true,
@@ -200,6 +259,9 @@ export default class TipccClient extends EventEmitter {
     );
   }
 
+  /**
+   * Get all wallets.
+   */
   public async getWallets(): Promise<Wallet[]> {
     const { wallets } = (await this.REST.request(
       'GET',
