@@ -89,7 +89,7 @@ export default class TipccClient extends EventEmitter {
     let transactions;
 
     // Retry until a successful reponse is received or max retries are reached
-    while (transactions === undefined) {
+    do {
       try {
         transactions = (
           (await this.REST.request('GET', '/account/transactions', {
@@ -108,7 +108,7 @@ export default class TipccClient extends EventEmitter {
             `Failed ${this.pollingRetries} consecutive API polls. Is the API responding?`,
           );
       }
-    }
+    } while(!transactions);
 
     // Reset pollingRetries, as it should only increment if multiple consecutive requests don't succeed
     if (this.pollingRetries > 0) this.pollingRetries = 0;
