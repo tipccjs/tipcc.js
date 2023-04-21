@@ -4,7 +4,7 @@ import { ApiAmount } from '../types/TipccApi';
 import {
   getCachedCryptoCurrency,
   getCachedFiatCurrency,
-} from '../functions/util/CacheHandler';
+} from '../utils/CacheHandler';
 
 export default class Amount {
   public value: BigNumber;

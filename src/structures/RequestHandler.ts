@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, RawAxiosResponseHeaders } from 'axios';
-import Bucket from './util/Bucket';
+import Bucket from '../utils/Bucket';
 
 export default class RequestHandler {
   private _apiBaseUrl: string;

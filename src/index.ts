@@ -1,5 +1,5 @@
 import { EventEmitter } from 'node:events';
-import RequestHandler from './functions/RequestHandler';
+import RequestHandler from './structures/RequestHandler';
 import {
   APIRESTGetAccountTransactions,
   APIRESTGetCurrenciesRates,
@@ -15,8 +15,8 @@ import {
   getCachedCryptoCurrencies,
   getCachedCryptoCurrency,
   updateFiatCurrenciesCache,
-} from './functions/util/CacheHandler';
-import { updateCurrenciesCache } from './functions/util/CacheHandler';
+} from './utils/CacheHandler';
+import { updateCurrenciesCache } from './utils/CacheHandler';
 import CryptoCurrency from './structures/CryptoCurrency';
 import ExchangeRate from './structures/ExchangeRate';
 import Wallet from './structures/Wallet';
