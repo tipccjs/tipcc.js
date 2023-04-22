@@ -3,6 +3,7 @@ export * from './structures/Currency';
 export * from './structures/CurrencyCache';
 export * from './structures/CurrencyFormatting';
 export * from './structures/ExchangeRate';
+export * from './structures/RequestHandler';
 export * from './structures/TipccClient';
 export * from './structures/Transaction';
 export * from './structures/User';
