@@ -1,6 +1,6 @@
-import type { APITransaction } from '@tipccjs/tipcc-api-types';
 import Amount from './Amount';
 import User from './User';
+import type { APITransaction } from '@tipccjs/tipcc-api-types';
 
 /**
  * A class for storing an API transaction.

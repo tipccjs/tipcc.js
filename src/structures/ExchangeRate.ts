@@ -1,5 +1,5 @@
-import type { APIExchangeRate } from '@tipccjs/tipcc-api-types';
 import Amount from './Amount';
+import type { APIExchangeRate } from '@tipccjs/tipcc-api-types';
 
 /**
  * A class for storing an API exchange rate for a cryptocurrency.

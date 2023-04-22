@@ -1,9 +1,9 @@
 import BigNumber from 'bignumber.js';
+import { CurrencyFormat } from './CurrencyFormatting';
 import type {
   APICryptoCurrency,
   APIFiatCurrency,
 } from '@tipccjs/tipcc-api-types';
-import { CurrencyFormat } from './CurrencyFormatting';
 
 /**
  * A class for storing an API cryptocurrency.
