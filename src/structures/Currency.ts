@@ -3,7 +3,7 @@ import type {
   APICryptoCurrency,
   APIFiatCurrency,
 } from '@tipccjs/tipcc-api-types';
-import CurrencyFormat from './CurrencyFormat';
+import { CurrencyFormat } from './CurrencyFormatting';
 
 /**
  * A class for storing an API cryptocurrency.
