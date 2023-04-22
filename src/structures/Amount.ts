@@ -14,7 +14,7 @@ import FiatCurrency from './FiatCurrency';
 export default class Amount {
   public value: BigNumber;
 
-  public currency?: CryptoCurrency | FiatCurrency;
+  public currency: CryptoCurrency | FiatCurrency | null;
 
   /**
    * Create an Amount.
@@ -28,10 +28,10 @@ export default class Amount {
     this.value = BigNumber(payload.value);
     switch (currencyType) {
       case 'crypto':
-        this.currency = getCachedCryptoCurrency(payload.currency);
+        this.currency = getCachedCryptoCurrency(payload.currency) ?? null;
         break;
       case 'fiat':
-        this.currency = getCachedFiatCurrency(payload.currency);
+        this.currency = getCachedFiatCurrency(payload.currency) ?? null;
         break;
     }
   }

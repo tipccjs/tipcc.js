@@ -1,4 +1,4 @@
-import { APIWallet } from '@tipccjs/tipcc-api-types';
+import type { APIWallet } from '@tipccjs/tipcc-api-types';
 import Amount from './Amount';
 
 /**

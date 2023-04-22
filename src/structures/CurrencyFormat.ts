@@ -1,4 +1,7 @@
-import { APICryptoCurrency, APIFiatCurrency } from '@tipccjs/tipcc-api-types';
+import type {
+  APICryptoCurrency,
+  APIFiatCurrency,
+} from '@tipccjs/tipcc-api-types';
 import CryptoCurrencyUnit from './CurrencyFormatUnits';
 
 /**

@@ -23,7 +23,7 @@ export default class RequestHandler {
   constructor(
     apiKey: string,
     payload: {
-      apiBaseUrl?: string;
+      apiBaseUrl?: string | undefined;
     } = {},
   ) {
     this._apiBaseUrl = payload.apiBaseUrl ?? 'https://api.tip.cc/api/v0';
