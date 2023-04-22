@@ -2,6 +2,8 @@ import type { APIConnection } from '@tipccjs/tipcc-api-types';
 
 /**
  * A class for storing an API user.
+ *
+ * @category API Classes
  */
 export class User {
   public identifier: string;

@@ -3,6 +3,8 @@ import type { APIExchangeRate } from '@tipccjs/tipcc-api-types';
 
 /**
  * A class for storing an API exchange rate for a cryptocurrency.
+ *
+ * @category API Classes
  */
 export class ExchangeRate {
   public code: string;

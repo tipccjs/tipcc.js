@@ -1,3 +1,6 @@
+/**
+ * @category Client utilities
+ */
 export class CurrencyCache<T> extends Array {
   private refreshFunction: () => T[] | Promise<T[]>;
 

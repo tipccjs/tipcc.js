@@ -4,6 +4,8 @@ import type { APITransaction } from '@tipccjs/tipcc-api-types';
 
 /**
  * A class for storing an API transaction.
+ *
+ * @category API Classes
  */
 export class Transaction {
   public id: string;

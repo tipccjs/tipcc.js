@@ -25,6 +25,8 @@ interface Events {
 
 /**
  * A tip.cc client to interact with the API.
+ *
+ * @category Client
  */
 export class TipccClient extends EventEmitter {
   public token: string;

@@ -1,5 +1,8 @@
 import type { AxiosRequestConfig } from 'axios';
 
+/**
+ * @category Utilities
+ */
 export class Bucket extends Array {
   public processing: ReturnType<typeof setTimeout> | boolean = false;
 

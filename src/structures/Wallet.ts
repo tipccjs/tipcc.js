@@ -3,6 +3,8 @@ import type { APIWallet } from '@tipccjs/tipcc-api-types';
 
 /**
  * A class for storing an API wallet.
+ *
+ * @category API Classes
  */
 export class Wallet {
   public code: string;

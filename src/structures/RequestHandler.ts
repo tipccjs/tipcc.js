@@ -3,6 +3,8 @@ import { Bucket } from '../utils/Bucket';
 
 /**
  * A handler used for HTTP requests.
+ *
+ * @category Utilities
  */
 export class RequestHandler {
   private _apiBaseUrl: string;

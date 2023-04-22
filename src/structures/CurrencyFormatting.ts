@@ -7,6 +7,8 @@ import type {
 
 /**
  * A class for storing an API cryptocurrency unit.
+ *
+ * @category Currency
  */
 export class CurrencyUnit {
   public singular: string;
@@ -46,6 +48,8 @@ export class CurrencyUnit {
 
 /**
  * A class for storing an API cryptocurrency format.
+ *
+ * @category Currency
  */
 export class CurrencyFormat {
   public scale: number;

@@ -1,5 +1,6 @@
 {
-  "entryPoints": ["./src/**/*.ts"],
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["./src/index.ts"],
   "out": "docs",
   "name": "tipcc.js Documentation",
   "cname": "tipccjs.org",
@@ -8,7 +9,10 @@
     "GitHub": "https://github.com/tipccjs/tipcc.js"
   },
   "defaultCategory": "Classes",
-  "categorizeByGroup": true,
+  "categorizeByGroup": false,
+  "categoryOrder": [
+    "Client", "Client utilities", "*", "Utilities"
+  ],
   "customCss": "./docs.css",
   "githubPages": false
 }

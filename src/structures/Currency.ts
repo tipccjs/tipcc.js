@@ -7,6 +7,8 @@ import type {
 
 /**
  * A class for storing an API cryptocurrency.
+ *
+ * @category Currency
  */
 export class CryptoCurrency {
   public code: string;
@@ -50,6 +52,8 @@ export class CryptoCurrency {
 
 /**
  * A class for storing an API fiat currency.
+ *
+ * @category Currency
  */
 export class FiatCurrency {
   public code: string;
