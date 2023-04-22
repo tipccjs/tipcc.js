@@ -18,7 +18,6 @@ export default class ExchangeRate {
   constructor(payload: APIExchangeRate) {
     this.code = payload.code;
     this.name = payload.name;
-    if (payload.usd_value)
-      this.usdValue = new Amount(payload.usd_value, 'fiat');
+    if (payload.usd_value) this.usdValue = new Amount(payload.usd_value);
   }
 }

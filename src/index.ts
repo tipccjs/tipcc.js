@@ -1,16 +1,14 @@
 import { EventEmitter } from 'node:events';
 import RequestHandler from './structures/RequestHandler';
 import Transaction from './structures/Transaction';
-import {
-  getCachedCryptoCurrencies,
-  getCachedCryptoCurrency,
-  updateFiatCurrenciesCache,
-} from './utils/CacheHandler';
-import { updateCurrenciesCache } from './utils/CacheHandler';
+import CurrencyCache from './structures/CurrencyCache';
 import CryptoCurrency from './structures/CryptoCurrency';
+import FiatCurrency from './structures/FiatCurrency';
 import ExchangeRate from './structures/ExchangeRate';
 import Wallet from './structures/Wallet';
 import {
+  RESTGetAPICurrenciesCryptoCurrenciesResult,
+  RESTGetAPICurrenciesFiatsResult,
   RESTGetAPIAccountTransactionResult,
   RESTGetAPIAccountTransactionsResult,
   RESTGetAPIAccountWalletResult,
@@ -33,6 +31,10 @@ class TipccClient extends EventEmitter {
   public token: string;
 
   public REST: RequestHandler;
+
+  public cryptos = new CurrencyCache<CryptoCurrency>(this._refreshCryptos);
+
+  public fiats = new CurrencyCache<FiatCurrency>(this._refreshFiats);
 
   public isReady = false;
 
@@ -74,10 +76,7 @@ class TipccClient extends EventEmitter {
     if (options.pollingInterval) this.pollingInterval = options.pollingInterval;
     if (options.maxRetries) this.maxRetries = options.maxRetries;
 
-    Promise.all([
-      updateCurrenciesCache(this),
-      updateFiatCurrenciesCache(this),
-    ]).then(() => {
+    Promise.all([this.cryptos.refresh(), this.fiats.refresh()]).then(() => {
       this.emit('ready');
       this.isReady = true;
     });
@@ -116,8 +115,8 @@ class TipccClient extends EventEmitter {
     if (this.pollingRetries > 0) this.pollingRetries = 0;
 
     for (const transaction of transactions) {
-      if (!getCachedCryptoCurrency(transaction.amount.currency))
-        await updateCurrenciesCache(this);
+      if (!this.cryptos.get(transaction.amount.currency))
+        await this.cryptos.refresh();
       this.emit(transaction.type, new Transaction(transaction));
     }
 
@@ -136,6 +135,28 @@ class TipccClient extends EventEmitter {
     }
   }
 
+  private async _refreshCryptos(): Promise<CryptoCurrency[]> {
+    const { cryptocurrencies } = (await this.REST.request(
+      'GET',
+      Routes.currenciesCryptocurrencies(),
+    )) as RESTGetAPICurrenciesCryptoCurrenciesResult;
+
+    const processed = cryptocurrencies.map((c) => new CryptoCurrency(c));
+
+    return processed;
+  }
+
+  private async _refreshFiats(): Promise<FiatCurrency[]> {
+    const { fiats } = (await this.REST.request(
+      'GET',
+      Routes.currenciesFiats(),
+    )) as RESTGetAPICurrenciesFiatsResult;
+
+    const processed = fiats.map((c) => new FiatCurrency(c));
+
+    return processed;
+  }
+
   public on<K extends keyof Events>(s: K, f: (arg: Events[K]) => void): this {
     super.on(s, f);
     this.polling.add(s);
@@ -148,28 +169,6 @@ class TipccClient extends EventEmitter {
     this.polling.delete(s);
     if (this.polling.size === 0 && this.pollingTimeout) this._stopPolling();
     return this;
-  }
-
-  /**
-   * Get a list of cryptocurrencies.
-   * @param cache Whether to use the cache (`true` by default)
-   */
-  public async getCryptoCurrencies(cache = true): Promise<CryptoCurrency[]> {
-    const currencies = getCachedCryptoCurrencies();
-    if (currencies.length > 0 && cache) return currencies;
-    await updateCurrenciesCache(this);
-    return getCachedCryptoCurrencies();
-  }
-
-  /**
-   * Get a list of fiat currencies.
-   * @param cache Whether to use the cache (`true` by default)
-   */
-  public async getFiatCurrencies(cache = true): Promise<CryptoCurrency[]> {
-    const currencies = getCachedCryptoCurrencies();
-    if (currencies.length > 0 && cache) return currencies;
-    await updateCurrenciesCache(this);
-    return getCachedCryptoCurrencies();
   }
 
   /**
