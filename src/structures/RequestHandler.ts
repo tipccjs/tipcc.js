@@ -67,6 +67,34 @@ export default class RequestHandler {
     }
   }
 
+  /**
+   * A shortcut for a GET request.
+   * @param route The route to request
+   * @param payload The data to send with the request
+   * @param requestOptions Optional additional configuration for Axios
+   */
+  public get(
+    route: string,
+    payload: any = {},
+    requestOptions: AxiosRequestConfig = {},
+  ) {
+    return this.request('GET', route, payload, requestOptions);
+  }
+
+  /**
+   * A shortcut for a POST request.
+   * @param route The route to request
+   * @param payload The data to send with the request
+   * @param requestOptions Optional additional configuration for Axios
+   */
+  public post(
+    route: string,
+    payload: any = {},
+    requestOptions: AxiosRequestConfig = {},
+  ) {
+    return this.request('POST', route, payload, requestOptions);
+  }
+
   public request(
     method: 'POST' | 'GET',
     route: string,
