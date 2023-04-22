@@ -1,4 +1,4 @@
-import { ApiUser } from '../types/TipccApi';
+import type { APIConnection } from '@tipccjs/tipcc-api-types';
 
 /**
  * A class for storing an API user.
@@ -6,9 +6,9 @@ import { ApiUser } from '../types/TipccApi';
 export default class User {
   public identifier: string;
 
-  public username: string;
+  public username?: string;
 
-  public avatarUrl: string;
+  public avatarUrl?: string;
 
   public service: 'discord';
 
@@ -16,7 +16,7 @@ export default class User {
    * Create a User.
    * @param payload The user from the API
    */
-  constructor(payload: ApiUser) {
+  constructor(payload: APIConnection) {
     this.identifier = payload.identifier;
     this.username = payload.username;
     this.avatarUrl = payload.avatar_url;

@@ -1,13 +1,5 @@
 import { EventEmitter } from 'node:events';
 import RequestHandler from './structures/RequestHandler';
-import {
-  APIRESTGetAccountTransactions,
-  APIRESTGetCurrenciesRates,
-  APIRESTGetTransaction,
-  APIRESTGetWallets,
-  APIRESTPostTipPayload,
-  APIRESTPostTips,
-} from './types/TipccApi';
 import Transaction from './structures/Transaction';
 import {
   getCachedCryptoCurrencies,
@@ -18,7 +10,16 @@ import { updateCurrenciesCache } from './utils/CacheHandler';
 import CryptoCurrency from './structures/CryptoCurrency';
 import ExchangeRate from './structures/ExchangeRate';
 import Wallet from './structures/Wallet';
-import { APIRESTGetWallet } from './types/TipccApi';
+import {
+  RESTGetAPIAccountTransactionResult,
+  RESTGetAPIAccountTransactionsResult,
+  RESTGetAPIAccountWalletResult,
+  RESTGetAPIAccountWalletsResult,
+  RESTGetAPICurrenciesRatesResult,
+  RESTPostAPITipBody,
+  RESTPostAPITipResult,
+  Routes,
+} from '@tipccjs/tipcc-api-types';
 
 interface Events {
   tip: Transaction;
@@ -28,7 +29,7 @@ interface Events {
 /**
  * A tip.cc client to interact with the API.
  */
-export default class TipccClient extends EventEmitter {
+class TipccClient extends EventEmitter {
   public token: string;
 
   public REST: RequestHandler;
@@ -97,7 +98,7 @@ export default class TipccClient extends EventEmitter {
             types: [...this.polling],
             since: this.lastPoll.toISOString(),
             until: now.toISOString(),
-          })) as APIRESTGetAccountTransactions
+          })) as RESTGetAPIAccountTransactionsResult
         ).transactions;
 
         break;
@@ -186,9 +187,9 @@ export default class TipccClient extends EventEmitter {
   ): Promise<Transaction[]> {
     const { transactions } = (await this.REST.request(
       'GET',
-      '/account/transactions',
+      Routes.accountWalletTransactions(),
       options,
-    )) as APIRESTGetAccountTransactions;
+    )) as RESTGetAPIAccountTransactionsResult;
     return transactions.map((t) => new Transaction(t));
   }
 
@@ -198,8 +199,8 @@ export default class TipccClient extends EventEmitter {
   public async getExchangeRates(): Promise<ExchangeRate[]> {
     const { rates } = (await this.REST.request(
       'GET',
-      '/exchange/rates',
-    )) as APIRESTGetCurrenciesRates;
+      Routes.currenciesRates(),
+    )) as RESTGetAPICurrenciesRatesResult;
     return rates.map((r) => new ExchangeRate(r));
   }
 
@@ -210,8 +211,8 @@ export default class TipccClient extends EventEmitter {
   public async getTransaction(id: string): Promise<Transaction | null> {
     const { transaction } = (await this.REST.request(
       'GET',
-      `/account/transactions/${id}`,
-    )) as APIRESTGetTransaction;
+      Routes.accountWalletTransaction(id),
+    )) as RESTGetAPIAccountTransactionResult;
     if (!transaction) return null;
     return new Transaction(transaction);
   }
@@ -221,13 +222,13 @@ export default class TipccClient extends EventEmitter {
    * @param payload The post tip payload
    */
   public async postTip(
-    payload: APIRESTPostTipPayload,
-  ): Promise<APIRESTPostTips> {
+    payload: RESTPostAPITipBody,
+  ): Promise<RESTPostAPITipResult> {
     return (await this.REST.request(
       'POST',
       '/tips',
       payload,
-    )) as APIRESTPostTips;
+    )) as RESTPostAPITipResult;
   }
 
   /**
@@ -241,8 +242,8 @@ export default class TipccClient extends EventEmitter {
   ): Promise<Wallet | null> {
     const result = (await this.REST.request(
       'GET',
-      `/account/wallets/${currency}`,
-    )) as APIRESTGetWallet | null;
+      Routes.accountWallet(currency),
+    )) as RESTGetAPIAccountWalletResult | null;
     if (!result && !fallback) return null;
     return new Wallet(
       result ?? {
@@ -266,8 +267,10 @@ export default class TipccClient extends EventEmitter {
   public async getWallets(): Promise<Wallet[]> {
     const { wallets } = (await this.REST.request(
       'GET',
-      '/account/wallets',
-    )) as APIRESTGetWallets;
+      Routes.accountWallets(),
+    )) as RESTGetAPIAccountWalletsResult;
     return wallets.map((w) => new Wallet(w));
   }
 }
+
+export default TipccClient;

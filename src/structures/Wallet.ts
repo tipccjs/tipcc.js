@@ -1,4 +1,4 @@
-import { ApiWallet } from '../types/TipccApi';
+import { APIWallet } from '@tipccjs/tipcc-api-types';
 import Amount from './Amount';
 
 /**
@@ -17,7 +17,7 @@ export default class Wallet {
    * Create a Wallet.
    * @param payload The wallet from the API
    */
-  constructor(payload: ApiWallet) {
+  constructor(payload: APIWallet) {
     this.code = payload.code;
     this.name = payload.name;
     this.balance = new Amount(payload.balance);

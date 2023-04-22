@@ -1,0 +1,14 @@
+{
+  "entryPoints": ["./src/**/*.ts"],
+  "out": "docs",
+  "name": "tipcc.js Documentation",
+  "cname": "tipccjs.org",
+  "hideGenerator": true,
+  "navigationLinks": {
+    "GitHub": "https://github.com/tipccjs/tipcc.js"
+  },
+  "defaultCategory": "Classes",
+  "categorizeByGroup": true,
+  "customCss": "./docs.css",
+  "githubPages": false
+}
