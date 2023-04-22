@@ -1,11 +1,11 @@
-import Amount from './Amount';
-import User from './User';
+import { Amount } from './Amount';
+import { User } from './User';
 import type { APITransaction } from '@tipccjs/tipcc-api-types';
 
 /**
  * A class for storing an API transaction.
  */
-export default class Transaction {
+export class Transaction {
   public id: string;
 
   public type: 'tip' | 'withdrawal' | 'deposit' = 'tip';

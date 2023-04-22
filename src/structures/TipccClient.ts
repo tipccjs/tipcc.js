@@ -1,10 +1,10 @@
 import { EventEmitter } from 'node:events';
-import RequestHandler from './RequestHandler';
-import Transaction from './Transaction';
-import CurrencyCache from './CurrencyCache';
+import { RequestHandler } from './RequestHandler';
+import { Transaction } from './Transaction';
+import { CurrencyCache } from './CurrencyCache';
 import { CryptoCurrency, FiatCurrency } from './Currency';
-import ExchangeRate from './ExchangeRate';
-import Wallet from './Wallet';
+import { ExchangeRate } from './ExchangeRate';
+import { Wallet } from './Wallet';
 import {
   RESTGetAPICurrenciesCryptoCurrenciesResult,
   RESTGetAPICurrenciesFiatsResult,
@@ -26,7 +26,7 @@ interface Events {
 /**
  * A tip.cc client to interact with the API.
  */
-class TipccClient extends EventEmitter {
+export class TipccClient extends EventEmitter {
   public token: string;
 
   public REST: RequestHandler;
@@ -270,5 +270,3 @@ class TipccClient extends EventEmitter {
     return wallets.map((w) => new Wallet(w));
   }
 }
-
-export default TipccClient;

@@ -4,7 +4,7 @@ import type { APICoin, APIMonetary } from '@tipccjs/tipcc-api-types';
 /**
  * A class for storing an API amount. This can be used for either fiats or cryptocurrencies.
  */
-export default class Amount {
+export class Amount {
   public valueRaw: BigNumber;
 
   public currency: string;
