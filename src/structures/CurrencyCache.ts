@@ -1,4 +1,4 @@
-export default class CurrencyCache<T> extends Array {
+export class CurrencyCache<T> extends Array {
   private refreshFunction: () => T[] | Promise<T[]>;
 
   constructor(refreshFunction: () => T[] | Promise<T[]>) {

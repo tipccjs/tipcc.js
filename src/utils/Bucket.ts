@@ -1,6 +1,6 @@
 import type { AxiosRequestConfig } from 'axios';
 
-export default class Bucket extends Array {
+export class Bucket extends Array {
   public processing: ReturnType<typeof setTimeout> | boolean = false;
 
   public limit: number;

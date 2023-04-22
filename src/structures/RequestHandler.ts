@@ -1,10 +1,10 @@
 import axios, { AxiosRequestConfig, RawAxiosResponseHeaders } from 'axios';
-import Bucket from '../utils/Bucket';
+import { Bucket } from '../utils/Bucket';
 
 /**
  * A handler used for HTTP requests.
  */
-export default class RequestHandler {
+export class RequestHandler {
   private _apiBaseUrl: string;
 
   private _apiKey: string;

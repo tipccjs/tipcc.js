@@ -3,7 +3,7 @@ import type { APIConnection } from '@tipccjs/tipcc-api-types';
 /**
  * A class for storing an API user.
  */
-export default class User {
+export class User {
   public identifier: string;
 
   public username: string | null;

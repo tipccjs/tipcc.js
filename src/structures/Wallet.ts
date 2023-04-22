@@ -1,10 +1,10 @@
+import { Amount } from './Amount';
 import type { APIWallet } from '@tipccjs/tipcc-api-types';
-import Amount from './Amount';
 
 /**
  * A class for storing an API wallet.
  */
-export default class Wallet {
+export class Wallet {
   public code: string;
 
   public name: string;

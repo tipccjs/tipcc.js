@@ -1,4 +1,6 @@
 import type {
+  APICryptoCurrency,
+  APIFiatCurrency,
   APICryptoCurrencyUnit,
   APIFiatCurrencyUnit,
 } from '@tipccjs/tipcc-api-types';
@@ -6,7 +8,7 @@ import type {
 /**
  * A class for storing an API cryptocurrency unit.
  */
-export default class CurrencyUnit {
+export class CurrencyUnit {
   public singular: string;
 
   public plural: string | null;
@@ -39,5 +41,25 @@ export default class CurrencyUnit {
     this.minDecimals = payload.minDecimals ?? null;
     this.optionalDecimals = payload.optionalDecimals ?? null;
     this.min = payload.min ?? null;
+  }
+}
+
+/**
+ * A class for storing an API cryptocurrency format.
+ */
+export class CurrencyFormat {
+  public scale: number;
+
+  public units: CurrencyUnit[];
+
+  /**
+   * Create a CryptoCurrencyFormat.
+   * @param payload The format from the API
+   */
+  constructor(
+    payload: APIFiatCurrency['format'] | APICryptoCurrency['format'],
+  ) {
+    this.scale = payload.scale;
+    this.units = payload.units.map((unit) => new CurrencyUnit(unit));
   }
 }
