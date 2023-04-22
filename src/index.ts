@@ -2,8 +2,7 @@ import { EventEmitter } from 'node:events';
 import RequestHandler from './structures/RequestHandler';
 import Transaction from './structures/Transaction';
 import CurrencyCache from './structures/CurrencyCache';
-import CryptoCurrency from './structures/CryptoCurrency';
-import FiatCurrency from './structures/FiatCurrency';
+import { CryptoCurrency, FiatCurrency } from './structures/Currency';
 import ExchangeRate from './structures/ExchangeRate';
 import Wallet from './structures/Wallet';
 import {
