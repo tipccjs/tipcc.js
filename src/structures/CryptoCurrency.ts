@@ -29,15 +29,15 @@ export default class CryptoCurrency {
   }
 
   /**
-   * Convert a raw value to an amount.
+   * Convert a raw value to a BigNumber in human readable format.
    * @param value The raw value
    */
-  public convertToAmount(value: BigNumber): BigNumber {
+  public convertFromRaw(value: BigNumber): BigNumber {
     return BigNumber(value).shiftedBy(this.format.scale * -1);
   }
 
   /**
-   * Convert an amount to a raw value.
+   * Convert a BigNumber value in human readable format to a raw API BigNumber.
    * @param value The amount
    */
   public convertToRaw(value: BigNumber): BigNumber {
