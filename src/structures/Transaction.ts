@@ -1,4 +1,4 @@
-import { ApiTransaction } from '../types/TipccApi';
+import type { APITransaction } from '@tipccjs/tipcc-api-types';
 import Amount from './Amount';
 import User from './User';
 
@@ -32,13 +32,13 @@ export default class Transaction {
    * Create a Transaction.
    * @param payload The transaction from the API
    */
-  constructor(payload: ApiTransaction) {
+  constructor(payload: APITransaction) {
     this.id = payload.id;
     this.type = payload.type;
     this.amount = new Amount(payload.amount);
     this.fee = payload.fee ? new Amount(payload.fee) : null;
-    this.usdValue = payload.usdValue
-      ? new Amount(payload.usdValue, 'fiat')
+    this.usdValue = payload.usd_value
+      ? new Amount(payload.usd_value, 'fiat')
       : null;
     this.service = payload.service;
     this.chatId = payload.chat_id;

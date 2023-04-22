@@ -1,5 +1,5 @@
-import { ApiCurrency } from '../types/TipccApi';
-import CryptoCurrencyFormat from './CryptoCurrencyFormat';
+import type { APICryptoCurrency } from '@tipccjs/tipcc-api-types';
+import CryptoCurrencyFormat from './CurrencyFormat';
 
 /**
  * A class for storing an API cryptocurrency.
@@ -19,7 +19,7 @@ export default class CryptoCurrency {
    * Create a CryptoCurrency.
    * @param payload The currency from the API
    */
-  constructor(payload: ApiCurrency) {
+  constructor(payload: APICryptoCurrency) {
     this.code = payload.code;
     this.name = payload.name;
     this.icon = payload.icon;

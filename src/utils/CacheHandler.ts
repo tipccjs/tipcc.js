@@ -1,12 +1,13 @@
+import {
+  RESTGetAPICurrenciesCryptoCurrenciesResult,
+  RESTGetAPICurrenciesFiatsResult,
+} from '@tipccjs/tipcc-api-types';
 import TipccClient from '../';
 import CryptoCurrency from '../structures/CryptoCurrency';
-import {
-  APIRESTGetCurrenciesCryptocurrencies,
-  APIRESTGetCurrentciesFiats,
-} from '../types/TipccApi';
+import FiatCurrency from '../structures/FiatCurrency';
 
 const cryptoCurrenciesCache: CryptoCurrency[] = [];
-const fiatCurrenciesCache: CryptoCurrency[] = [];
+const fiatCurrenciesCache: FiatCurrency[] = [];
 
 export const updateCurrenciesCache = async (
   client: TipccClient,
@@ -14,7 +15,7 @@ export const updateCurrenciesCache = async (
   const { cryptocurrencies } = (await client.REST.request(
     'GET',
     '/currencies/cryptocurrencies',
-  )) as APIRESTGetCurrenciesCryptocurrencies;
+  )) as RESTGetAPICurrenciesCryptoCurrenciesResult;
   cryptoCurrenciesCache.splice(
     0,
     cryptoCurrenciesCache.length,
@@ -34,16 +35,14 @@ export const updateFiatCurrenciesCache = async (
   const { fiats } = (await client.REST.request(
     'GET',
     '/currencies/fiats',
-  )) as APIRESTGetCurrentciesFiats;
+  )) as RESTGetAPICurrenciesFiatsResult;
   fiatCurrenciesCache.splice(
     0,
     fiatCurrenciesCache.length,
-    ...fiats.map((c) => new CryptoCurrency(c)),
+    ...fiats.map((c) => new FiatCurrency(c)),
   );
 };
-export const getCachedFiatCurrency = (
-  code: string,
-): CryptoCurrency | undefined =>
+export const getCachedFiatCurrency = (code: string): FiatCurrency | undefined =>
   fiatCurrenciesCache.find((c) => c.code === code);
-export const getCachedFiatCurrencies = (): CryptoCurrency[] =>
+export const getCachedFiatCurrencies = (): FiatCurrency[] =>
   fiatCurrenciesCache;

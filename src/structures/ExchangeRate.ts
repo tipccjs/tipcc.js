@@ -1,4 +1,4 @@
-import { ApiRate } from '../types/TipccApi';
+import type { APIExchangeRate } from '@tipccjs/tipcc-api-types';
 import Amount from './Amount';
 
 /**
@@ -15,7 +15,7 @@ export default class ExchangeRate {
    * Create an ExchangeRate.
    * @param payload The rate from the API
    */
-  constructor(payload: ApiRate) {
+  constructor(payload: APIExchangeRate) {
     this.code = payload.code;
     this.name = payload.name;
     if (payload.usd_value)

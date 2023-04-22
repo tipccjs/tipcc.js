@@ -3,9 +3,20 @@
     "target": "ES2022",
     "module": "commonjs",
     "declaration": true,
-    "outDir": "./dist",
-    "strict": true
+    "outDir": "./lib",
+    "strict": true,
+    "alwaysStrict": true,
+    "lib": ["ES2022"],
+    "noUnusedParameters": true,
+    "sourceMap": true,
+    "declarationMap": true,
+    "noUnusedLocals": true,
+    "removeComments": false,
+    "strictNullChecks": true,
+    "preserveConstEnums": true,
+    "exactOptionalPropertyTypes": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*", ".eslintrc.js"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "docs", "lib"]
 }
