@@ -1,6 +1,16 @@
+/**
+ * A class extending Array holding a cache of objects with type T.
+ *
+ * @category Client utilities
+ * @typeParam T - The object type this {@link CurrencyCache} will hold
+ */
 export class CurrencyCache<T> extends Array {
   private refreshFunction: () => T[] | Promise<T[]>;
 
+  /**
+   * Create a CurrencyCache.
+   * @param refreshFunction The refresh function which returns new values to insert to this cache
+   */
   constructor(refreshFunction: () => T[] | Promise<T[]>) {
     super();
 
