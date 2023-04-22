@@ -1,5 +1,8 @@
 import { ApiCurrencyFormatUnit } from '../types/TipccApi';
 
+/**
+ * A class for storing an API cryptocurrency unit.
+ */
 export default class CryptoCurrencyUnit {
   public singular: string;
 
@@ -19,6 +22,10 @@ export default class CryptoCurrencyUnit {
 
   public min: number;
 
+  /**
+   * Create a CryptoCurrencyUnit.
+   * @param payload The format unit from the API
+   */
   constructor(payload: ApiCurrencyFormatUnit) {
     this.singular = payload.singular;
     this.plural = payload.plural ?? undefined;

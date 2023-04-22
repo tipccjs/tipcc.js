@@ -2,6 +2,9 @@ import { ApiTransaction } from '../types/TipccApi';
 import Amount from './Amount';
 import User from './User';
 
+/**
+ * A class for storing an API transaction.
+ */
 export default class Transaction {
   public id: string;
 
@@ -25,6 +28,10 @@ export default class Transaction {
 
   public created: Date;
 
+  /**
+   * Create a Transaction.
+   * @param payload The transaction from the API
+   */
   constructor(payload: ApiTransaction) {
     this.id = payload.id;
     this.type = payload.type;
