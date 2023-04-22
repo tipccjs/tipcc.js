@@ -29,18 +29,25 @@ interface Events {
  * @category Client
  */
 export class TipccClient extends EventEmitter {
+  /** The tip.cc API token this client uses */
   public token: string;
 
+  /** The {@link RequestHandler} this client uses */
   public REST: RequestHandler;
 
+  /** The {@link CurrencyCache} for cryptocurrencies */
   public cryptos = new CurrencyCache<CryptoCurrency>(this._refreshCryptos);
 
+  /** The {@link CurrencyCache} for fiat currencies */
   public fiats = new CurrencyCache<FiatCurrency>(this._refreshFiats);
 
+  /** A boolean indicating whether the client is ready */
   public isReady = false;
 
+  /** The number of milliseconds between each API poll  */
   public pollingInterval = 10000;
 
+  /** The max number of retries to poll the API, after which an error will be thrown */
   public maxRetries = 5;
 
   private polling = new Set();
@@ -54,7 +61,10 @@ export class TipccClient extends EventEmitter {
   /**
    * Create a tip.cc client.
    * @param token The tip.cc API token to use
-   * @param options Optional options
+   * @param options The options to use
+   * @param options.baseUrl The base URL for requests
+   * @param options.pollingInterval The number of milliseconds between each API poll. Defaults to `10000`.
+   * @param options.maxRetries The max number of retries to poll the API, after which an error will be thrown. Defaults to `5`.
    */
   constructor(
     token: string,

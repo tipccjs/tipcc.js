@@ -7,8 +7,10 @@ import type { APICoin, APIMonetary } from '@tipccjs/tipcc-api-types';
  * @category Currency
  */
 export class Amount {
+  /** The raw API BigNumber */
   public valueRaw: BigNumber;
 
+  /** The currency code */
   public currency: string;
 
   /**

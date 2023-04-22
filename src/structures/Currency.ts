@@ -11,14 +11,19 @@ import type {
  * @category Currency
  */
 export class CryptoCurrency {
+  /** The currency code */
   public code: string;
 
+  /** The currency name */
   public name: string;
 
+  /** The currency icon link */
   public icon: string;
 
+  /** The currency explorer link */
   public explorer: string;
 
+  /** An instance of {@link CurrencyFormat} for this currency */
   public format: CurrencyFormat;
 
   /**
@@ -56,10 +61,13 @@ export class CryptoCurrency {
  * @category Currency
  */
 export class FiatCurrency {
+  /** The currency code */
   public code: string;
 
+  /** The currency name */
   public name: string;
 
+  /** An instance of {@link CurrencyFormat} for this currency */
   public format: CurrencyFormat;
 
   /**

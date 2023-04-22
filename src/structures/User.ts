@@ -6,12 +6,16 @@ import type { APIConnection } from '@tipccjs/tipcc-api-types';
  * @category API Classes
  */
 export class User {
+  /** The identifier (id) of this user */
   public identifier: string;
 
+  /** The user's username */
   public username: string | null;
 
+  /** The user's avatar URL */
   public avatarUrl: string | null;
 
+  /** The service where this user is registered */
   public service: 'discord';
 
   /**

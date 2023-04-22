@@ -20,7 +20,8 @@ export class RequestHandler {
   /**
    * Create a RequestHandler.
    * @param apiKey The tip.cc API key
-   * @param payload Optional: options for requests
+   * @param payload The options for requests
+   * @param payload.apiBaseUrl The base URL to use
    */
   constructor(
     apiKey: string,
@@ -97,6 +98,14 @@ export class RequestHandler {
     return this.request('POST', route, payload, requestOptions);
   }
 
+  /**
+   * Send a HTTP request
+   * @param method The HTTP method
+   * @param route The route to request
+   * @param payload The data to send with the request
+   * @param requestOptions Optional additional configuration for Axios
+   * @returns
+   */
   public request(
     method: 'POST' | 'GET',
     route: string,

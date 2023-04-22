@@ -7,10 +7,13 @@ import type { APIExchangeRate } from '@tipccjs/tipcc-api-types';
  * @category API Classes
  */
 export class ExchangeRate {
+  /** The currency code */
   public code: string;
 
+  /** The currency name */
   public name: string;
 
+  /** The USD value of {@link ExchangeRate.code currency} */
   public usdValue?: Amount;
 
   /**
