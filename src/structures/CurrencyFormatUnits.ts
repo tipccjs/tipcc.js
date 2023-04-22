@@ -9,21 +9,21 @@ import type {
 export default class CurrencyUnit {
   public singular: string;
 
-  public plural?: string;
+  public plural: string | null;
 
-  public prefix?: string;
+  public prefix: string | null;
 
-  public suffix?: string;
+  public suffix: string | null;
 
   public scale: number;
 
   public aliases: string[];
 
-  public minDecimals?: number;
+  public minDecimals: number | null;
 
-  public optionalDecimals?: boolean;
+  public optionalDecimals: boolean | null;
 
-  public min?: number;
+  public min: number | null;
 
   /**
    * Create a CryptoCurrencyUnit.
@@ -31,13 +31,13 @@ export default class CurrencyUnit {
    */
   constructor(payload: APIFiatCurrencyUnit | APICryptoCurrencyUnit) {
     this.singular = payload.singular;
-    this.plural = payload.plural ?? undefined;
-    this.prefix = payload.prefix;
-    this.suffix = payload.suffix;
+    this.plural = payload.plural ?? null;
+    this.prefix = payload.prefix ?? null;
+    this.suffix = payload.suffix ?? null;
     this.scale = payload.scale;
     this.aliases = payload.aliases ?? [];
-    this.minDecimals = payload.minDecimals;
-    this.optionalDecimals = payload.optionalDecimals;
-    this.min = payload.min;
+    this.minDecimals = payload.minDecimals ?? null;
+    this.optionalDecimals = payload.optionalDecimals ?? null;
+    this.min = payload.min ?? null;
   }
 }

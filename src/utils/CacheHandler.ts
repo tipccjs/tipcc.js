@@ -1,4 +1,4 @@
-import {
+import type {
   RESTGetAPICurrenciesCryptoCurrenciesResult,
   RESTGetAPICurrenciesFiatsResult,
 } from '@tipccjs/tipcc-api-types';

@@ -6,9 +6,9 @@ import type { APIConnection } from '@tipccjs/tipcc-api-types';
 export default class User {
   public identifier: string;
 
-  public username?: string;
+  public username: string | null;
 
-  public avatarUrl?: string;
+  public avatarUrl: string | null;
 
   public service: 'discord';
 
@@ -18,8 +18,8 @@ export default class User {
    */
   constructor(payload: APIConnection) {
     this.identifier = payload.identifier;
-    this.username = payload.username;
-    this.avatarUrl = payload.avatar_url;
+    this.username = payload.username ?? null;
+    this.avatarUrl = payload.avatar_url ?? null;
     this.service = payload.service;
   }
 }
