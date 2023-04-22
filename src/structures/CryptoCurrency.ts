@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import type { APICryptoCurrency } from '@tipccjs/tipcc-api-types';
 import CryptoCurrencyFormat from './CurrencyFormat';
 
@@ -25,5 +26,21 @@ export default class CryptoCurrency {
     this.icon = payload.icon;
     this.explorer = payload.explorer;
     this.format = new CryptoCurrencyFormat(payload.format);
+  }
+
+  /**
+   * Convert a raw value to a BigNumber in human readable format.
+   * @param value The raw value
+   */
+  public convertFromRaw(value: BigNumber): BigNumber {
+    return BigNumber(value).shiftedBy(this.format.scale * -1);
+  }
+
+  /**
+   * Convert a BigNumber value in human readable format to a raw API BigNumber.
+   * @param value The amount
+   */
+  public convertToRaw(value: BigNumber): BigNumber {
+    return value.shiftedBy(this.format.scale);
   }
 }

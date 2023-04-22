@@ -21,8 +21,6 @@ export default class Wallet {
     this.code = payload.code;
     this.name = payload.name;
     this.balance = new Amount(payload.balance);
-    this.usdValue = payload.usd_value
-      ? new Amount(payload.usd_value, 'fiat')
-      : null;
+    this.usdValue = payload.usd_value ? new Amount(payload.usd_value) : null;
   }
 }

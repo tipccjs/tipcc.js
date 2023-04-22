@@ -37,9 +37,7 @@ export default class Transaction {
     this.type = payload.type;
     this.amount = new Amount(payload.amount);
     this.fee = payload.fee ? new Amount(payload.fee) : null;
-    this.usdValue = payload.usd_value
-      ? new Amount(payload.usd_value, 'fiat')
-      : null;
+    this.usdValue = payload.usd_value ? new Amount(payload.usd_value) : null;
     this.service = payload.service;
     this.chatId = payload.chat_id;
     this.subchatId = payload.subchat_id;
