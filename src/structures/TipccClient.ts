@@ -23,6 +23,11 @@ interface Events {
   ready: void;
 }
 
+interface Emoji {
+  name: string;
+  id: string;
+}
+
 /**
  * A tip.cc client to interact with the API.
  *
@@ -41,6 +46,11 @@ export class TipccClient extends EventEmitter {
   /** The {@link CurrencyCache} for fiat currencies */
   public fiats = new CurrencyCache<FiatCurrency>(this._refreshFiats);
 
+  /** The {@link CurrencyCache} for exchange rates */
+  public exchangeRates = new CurrencyCache<ExchangeRate>(
+    this._refreshExchangeRates,
+  );
+
   /** A boolean indicating whether the client is ready */
   public isReady = false;
 
@@ -49,6 +59,11 @@ export class TipccClient extends EventEmitter {
 
   /** The max number of retries to poll the API, after which an error will be thrown */
   public maxRetries = 5;
+
+  /** The number of milliseconds between each exchange rate refresh (0 = no automatic refresh) */
+  public exchangeRateRefreshInterval = 60 * 1000;
+
+  private _emojis: Map<string, string> = new Map();
 
   private polling = new Set();
 
@@ -87,10 +102,29 @@ export class TipccClient extends EventEmitter {
     if (options.pollingInterval) this.pollingInterval = options.pollingInterval;
     if (options.maxRetries) this.maxRetries = options.maxRetries;
 
-    Promise.all([this.cryptos.refresh(), this.fiats.refresh()]).then(() => {
+    Promise.all([
+      this.cryptos.refresh(),
+      this.fiats.refresh(),
+      this.exchangeRates.refresh(),
+    ]).then(() => {
+      if (this.exchangeRateRefreshInterval > 0)
+        setInterval(
+          () => this.exchangeRates.refresh(),
+          this.exchangeRateRefreshInterval,
+        );
       this.emit('ready');
       this.isReady = true;
     });
+  }
+
+  /** A map for emojis which should be used for formatted amounts */
+  public get emojis(): Emoji[] {
+    return [...this._emojis].map(([name, id]) => ({ name, id }));
+  }
+
+  /** A map for emojis which should be used for formatted amounts */
+  public set emojis(emojis: Emoji[]) {
+    this._emojis = new Map(emojis.map(({ name, id }) => [name, id]));
   }
 
   /**
@@ -152,9 +186,7 @@ export class TipccClient extends EventEmitter {
       Routes.currenciesCryptocurrencies(),
     )) as RESTGetAPICurrenciesCryptoCurrenciesResult;
 
-    const processed = cryptocurrencies.map((c) => new CryptoCurrency(c));
-
-    return processed;
+    return cryptocurrencies.map((c) => new CryptoCurrency(c));
   }
 
   private async _refreshFiats(): Promise<FiatCurrency[]> {
@@ -163,9 +195,15 @@ export class TipccClient extends EventEmitter {
       Routes.currenciesFiats(),
     )) as RESTGetAPICurrenciesFiatsResult;
 
-    const processed = fiats.map((c) => new FiatCurrency(c));
+    return fiats.map((c) => new FiatCurrency(c));
+  }
 
-    return processed;
+  private async _refreshExchangeRates(): Promise<ExchangeRate[]> {
+    const { rates } = (await this.REST.request(
+      'GET',
+      Routes.currenciesRates(),
+    )) as RESTGetAPICurrenciesRatesResult;
+    return rates.map((r) => new ExchangeRate(r));
   }
 
   public on<K extends keyof Events>(s: K, f: (arg: Events[K]) => void): this {

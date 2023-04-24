@@ -25,7 +25,7 @@ export class CurrencyUnit {
 
   public minDecimals: number | null;
 
-  public optionalDecimals: boolean | null;
+  public optionalDecimals: number | null;
 
   public min: number | null;
 
@@ -41,7 +41,7 @@ export class CurrencyUnit {
     this.scale = payload.scale;
     this.aliases = payload.aliases ?? [];
     this.minDecimals = payload.minDecimals ?? null;
-    this.optionalDecimals = payload.optionalDecimals ?? null;
+    this.optionalDecimals = (payload.optionalDecimals as any as number) ?? null;
     this.min = payload.min ?? null;
   }
 }

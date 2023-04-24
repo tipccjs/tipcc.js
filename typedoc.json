@@ -10,9 +10,7 @@
   },
   "defaultCategory": "Classes",
   "categorizeByGroup": false,
-  "categoryOrder": [
-    "Client", "Client utilities", "*", "Utilities"
-  ],
+  "categoryOrder": ["Client", "Client utilities", "*", "Utilities"],
   "customCss": "./docs.css",
   "githubPages": false
 }
