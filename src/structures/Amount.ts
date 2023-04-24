@@ -53,7 +53,7 @@ export class Amount {
   }
 
   /** The client that instantiated this */
-  public client: TipccClient | null = null;
+  public client: TipccClient | undefined;
 
   /**
    * Create an Amount.
@@ -79,9 +79,11 @@ export class Amount {
         .find((u) => BigNumber(u.min!).lte(this.valueRaw)) ??
       currency.format.units[0];
 
-    return `${emoji ? `${emoji} ` : ''} ${this.valueRaw
+    const usdValue = this.usdValue;
+
+    return `**${emoji ? `${emoji} ` : ''} ${this.valueRaw
       .shiftedBy(-unit.scale)
       .toFixed(unit.optionalDecimals ?? unit.scale)
-      .replace(/\.?0+$/, '')} ${unit.singular} ${includeUsd ? 'USD' : ''}`;
+      .replace(/\.?0+$/, '')} ${unit.singular}**${includeUsd && usdValue ? ` (≈ $${usdValue.lt(0.01) ? usdValue.toFixed(4) : usdValue.toFixed(2)})` : ''}`;
   }
 }
