@@ -54,8 +54,10 @@ export class Transaction {
     this.id = payload.id;
     this.type = payload.type;
     this.amount = new Amount(payload.amount, this.client);
-    this.fee = payload.fee ? new Amount(payload.fee) : null;
-    this.usdValue = payload.usd_value ? new Amount(payload.usd_value, this.client) : null;
+    this.fee = payload.fee ? new Amount(payload.fee, this.client) : null;
+    this.usdValue = payload.usd_value
+      ? new Amount(payload.usd_value, this.client)
+      : null;
     this.service = payload.service;
     this.chatId = payload.chat_id;
     this.subchatId = payload.subchat_id;

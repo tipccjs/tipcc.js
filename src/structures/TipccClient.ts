@@ -162,7 +162,7 @@ export class TipccClient extends EventEmitter {
     for (const transaction of transactions) {
       if (!this.cryptos.get(transaction.amount.currency))
         await this.cryptos.refresh();
-      this.emit(transaction.type, new Transaction(transaction));
+      this.emit(transaction.type, new Transaction(transaction, this));
     }
 
     this.lastPoll = now;
@@ -203,7 +203,7 @@ export class TipccClient extends EventEmitter {
       'GET',
       Routes.currenciesRates(),
     )) as RESTGetAPICurrenciesRatesResult;
-    return rates.map((r) => new ExchangeRate(r));
+    return rates.map((r) => new ExchangeRate(r, this));
   }
 
   public on<K extends keyof Events>(s: K, f: (arg: Events[K]) => void): this {
@@ -238,7 +238,7 @@ export class TipccClient extends EventEmitter {
       Routes.accountWalletTransactions(),
       options,
     )) as RESTGetAPIAccountTransactionsResult;
-    return transactions.map((t) => new Transaction(t));
+    return transactions.map((t) => new Transaction(t, this));
   }
 
   /**
@@ -249,7 +249,7 @@ export class TipccClient extends EventEmitter {
       'GET',
       Routes.currenciesRates(),
     )) as RESTGetAPICurrenciesRatesResult;
-    return rates.map((r) => new ExchangeRate(r));
+    return rates.map((r) => new ExchangeRate(r, this));
   }
 
   /**
@@ -262,7 +262,7 @@ export class TipccClient extends EventEmitter {
       Routes.accountWalletTransaction(id),
     )) as RESTGetAPIAccountTransactionResult;
     if (!transaction) return null;
-    return new Transaction(transaction);
+    return new Transaction(transaction, this);
   }
 
   /**
@@ -306,6 +306,7 @@ export class TipccClient extends EventEmitter {
           currency,
         },
       },
+      this,
     );
   }
 
@@ -317,6 +318,6 @@ export class TipccClient extends EventEmitter {
       'GET',
       Routes.accountWallets(),
     )) as RESTGetAPIAccountWalletsResult;
-    return wallets.map((w) => new Wallet(w));
+    return wallets.map((w) => new Wallet(w, this));
   }
 }
