@@ -3,7 +3,6 @@ import type { APIWallet } from '@tipccjs/tipcc-api-types';
 import { TipccClient } from './TipccClient';
 import { Currency } from './Currency';
 import { ExchangeRate } from './ExchangeRate';
-import BigNumber from 'bignumber.js';
 
 /**
  * A class for storing an API wallet.
