@@ -28,10 +28,10 @@ export class Transaction {
   public service = 'discord' as const;
 
   /** The chat (guild) id where this transaction took place */
-  public chatId: string;
+  public chatId: string | null;
 
   /** The subchat (channel) id where this transaction took place */
-  public subchatId: string;
+  public subchatId: string | null;
 
   /** The id of the sender */
   public sender: User;
@@ -59,8 +59,8 @@ export class Transaction {
       ? new Amount(payload.usd_value, this.client)
       : null;
     this.service = payload.service;
-    this.chatId = payload.chat_id;
-    this.subchatId = payload.subchat_id;
+    this.chatId = payload.chat_id ?? null;
+    this.subchatId = payload.subchat_id ?? null;
     this.sender = new User(payload.sender);
     this.recipient = new User(payload.recipient);
     this.created = new Date(payload.created);
