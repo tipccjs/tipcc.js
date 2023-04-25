@@ -168,7 +168,7 @@ export class TransactionManager extends EventEmitter {
         this.emit(transaction.type, transaction);
       else
         console.warn(
-          `Unknown currency code ${transaction.amount.currencyCode} for transaction ${transaction.id} - Not emitting event.`,
+          `Event emittion cancelled: Unknown currency code ${transaction.amount.currencyCode} for transaction ${transaction.id}`,
         );
     }
 
