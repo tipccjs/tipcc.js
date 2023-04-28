@@ -16,7 +16,7 @@ import {
   RESTPostAPITipBody,
   RESTPostAPITipResult,
   Routes,
-} from '@tipccjs/tipcc-api-types';
+} from '@tipccjs/tipcc-api-types/v0';
 
 interface Events {
   tip: Transaction;

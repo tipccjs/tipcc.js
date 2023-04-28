@@ -3,7 +3,7 @@ import type {
   APIFiatCurrency,
   APICryptoCurrencyUnit,
   APIFiatCurrencyUnit,
-} from '@tipccjs/tipcc-api-types';
+} from '@tipccjs/tipcc-api-types/v0';
 
 /**
  * A class for storing an API cryptocurrency unit.
@@ -25,7 +25,7 @@ export class CurrencyUnit {
 
   public minDecimals: number | null;
 
-  public optionalDecimals: boolean | null;
+  public optionalDecimals: number | null;
 
   public min: number | null;
 

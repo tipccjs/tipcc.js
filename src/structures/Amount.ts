@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import type { APICoin, APIMonetary } from '@tipccjs/tipcc-api-types';
+import type { APICoin, APIMonetary } from '@tipccjs/tipcc-api-types/v0';
 
 /**
  * A class for storing an API amount. This can be used for either fiats or cryptocurrencies.

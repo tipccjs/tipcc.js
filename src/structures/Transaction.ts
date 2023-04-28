@@ -1,6 +1,6 @@
 import { Amount } from './Amount';
 import { User } from './User';
-import type { APITransaction } from '@tipccjs/tipcc-api-types';
+import type { APITransaction } from '@tipccjs/tipcc-api-types/v0';
 
 /**
  * A class for storing an API transaction.
@@ -27,10 +27,10 @@ export class Transaction {
   public service = 'discord' as const;
 
   /** The chat (guild) id where this transaction took place */
-  public chatId: string;
+  public chatId: string | null;
 
   /** The subchat (channel) id where this transaction took place */
-  public subchatId: string;
+  public subchatId: string | null;
 
   /** The id of the sender */
   public sender: User;
