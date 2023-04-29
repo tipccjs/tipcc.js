@@ -7,7 +7,7 @@
     "strict": true,
     "strictNullChecks": true,
     "exactOptionalPropertyTypes": true,
-    
+
     // Emit
     "outDir": "./lib",
     "target": "ES2022",
@@ -16,7 +16,7 @@
     "removeComments": false,
     "preserveConstEnums": true,
     "sourceMap": true,
-    
+
     // Modules
     "module": "CommonJS",
     "moduleResolution": "node16",
@@ -24,7 +24,7 @@
 
     // Various
     "lib": ["ES2022"],
-    "forceConsistentCasingInFileNames": true,
+    "forceConsistentCasingInFileNames": true
   },
   "exclude": ["node_modules", "docs", "lib"]
 }

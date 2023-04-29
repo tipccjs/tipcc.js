@@ -87,8 +87,8 @@ export class Amount {
       .replace(/\.?0+$/, '')} ${unit.singular}**${
       includeUsd && usdValue
         ? ` (≈ $${
-            usdValue.lt(0.01) ? usdValue.toFixed(4) : usdValue.toFixed(2)
-          })`
+          usdValue.lt(0.01) ? usdValue.toFixed(4) : usdValue.toFixed(2)
+        })`
         : ''
     }`;
   }
