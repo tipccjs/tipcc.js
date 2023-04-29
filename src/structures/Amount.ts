@@ -81,16 +81,22 @@ export class Amount {
 
     const usdValue = this.usdValue;
 
-    return `**${emoji ? `${emoji} ` : ''} ${this.valueRaw
+    const preparedValue = this.valueRaw
       .shiftedBy(-unit.scale)
       .toFixed(unit.optionalDecimals ?? unit.scale)
-      .replace(/\.?0+$/, '')} ${unit.singular}**${
-      includeUsd && usdValue
-        ? ` (≈ $${
-            usdValue.lt(0.01) ? usdValue.toFixed(4) : usdValue.toFixed(2)
-          })`
-        : ''
-    }`;
+      .replace(/\.?0+$/, '');
+
+    if (includeUsd && usdValue) {
+      const displayedUsd = usdValue.lt(0.01)
+        ? usdValue.toFixed(4)
+        : usdValue.toFixed(2);
+
+      return `**${emoji ? `${emoji} ` : ''} ${preparedValue} ${
+        unit.singular
+      } **${`(≈ $${displayedUsd})`}`;
+    } else {
+      return `**${emoji ? `${emoji} ` : ''} ${preparedValue} ${unit.singular}`;
+    }
   }
 
   public addRaw(value: BigNumber): void {
