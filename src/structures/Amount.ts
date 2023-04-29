@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import type { APICoin, APIMonetary } from '@tipccjs/tipcc-api-types';
+import type { APICoin, APIMonetary } from '@tipccjs/tipcc-api-types/v0';
 import { TipccClient } from './TipccClient';
 import { CryptoCurrency, FiatCurrency } from './Currency';
 
@@ -87,8 +87,8 @@ export class Amount {
       .replace(/\.?0+$/, '')} ${unit.singular}**${
       includeUsd && usdValue
         ? ` (≈ $${
-          usdValue.lt(0.01) ? usdValue.toFixed(4) : usdValue.toFixed(2)
-        })`
+            usdValue.lt(0.01) ? usdValue.toFixed(4) : usdValue.toFixed(2)
+          })`
         : ''
     }`;
   }

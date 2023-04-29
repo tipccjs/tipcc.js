@@ -1,5 +1,5 @@
 import { Amount } from './Amount';
-import type { APIWallet } from '@tipccjs/tipcc-api-types';
+import type { APIWallet } from '@tipccjs/tipcc-api-types/v0';
 import { TipccClient } from './TipccClient';
 import { Currency } from './Currency';
 import { ExchangeRate } from './ExchangeRate';

@@ -9,7 +9,7 @@ import {
   RESTGetAPICurrenciesFiatsResult,
   RESTGetAPICurrenciesRatesResult,
   Routes,
-} from '@tipccjs/tipcc-api-types';
+} from '@tipccjs/tipcc-api-types/v0';
 import { WalletManager } from './Manager/WalletManager';
 import { TransactionManager } from './Manager/TransactionManager';
 

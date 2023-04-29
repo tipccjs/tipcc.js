@@ -1,0 +1,31 @@
+name: Continuous Integration / Deployment
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+
+jobs:
+  testing:
+    name: ESLint and TypeScript compilation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v3
+
+      - name: Use Node.js v18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: npm
+          registry-url: https://registry.npmjs.org/
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check lint on tipcc-api-types
+        run: npm run test:lint
+
+      - name: Run TSC
+        run: npm run build

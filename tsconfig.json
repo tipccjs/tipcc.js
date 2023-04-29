@@ -1,21 +1,29 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "commonjs",
-    "declaration": true,
-    "outDir": "./lib",
-    "strict": true,
+    // Type checking
     "alwaysStrict": true,
-    "lib": ["ES2022"],
     "noUnusedParameters": true,
-    "sourceMap": true,
-    "declarationMap": true,
     "noUnusedLocals": true,
-    "removeComments": false,
+    "strict": true,
     "strictNullChecks": true,
-    "preserveConstEnums": true,
     "exactOptionalPropertyTypes": true,
+
+    // Emit
+    "outDir": "./lib",
+    "target": "ES2022",
+    "declaration": true,
+    "declarationMap": true,
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+
+    // Modules
+    "module": "CommonJS",
+    "moduleResolution": "node16",
     "esModuleInterop": true,
+
+    // Various
+    "lib": ["ES2022"],
     "forceConsistentCasingInFileNames": true
   },
   "exclude": ["node_modules", "docs", "lib"]

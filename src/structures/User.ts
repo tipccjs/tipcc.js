@@ -1,4 +1,4 @@
-import type { APIConnection } from '@tipccjs/tipcc-api-types';
+import type { APIConnection } from '@tipccjs/tipcc-api-types/v0';
 
 /**
  * A class for storing an API user.
