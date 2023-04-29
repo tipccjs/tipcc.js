@@ -35,6 +35,7 @@ jobs:
         run: |
           git config --global user.name '{{ env.CI_COMMIT_AUTHOR }}'  
           git config --global user.email 'Walledgarden@users.noreply.github.com'
+          git remote set-url origin https://Walledgarden:{{ GH_TOKEN }}@github.com/tipccjs/tipcc.js.git
           git add package.json
           git commit -m "${{ env.CI_COMMIT_MESSAGE }}"
           git push origin HEAD:main
