@@ -1,5 +1,5 @@
 {
-  "name": "tipcc-api-client",
+  "name": "tipcc.js",
   "version": "1.0.3",
   "description": "# tip.cc API Client",
   "main": "lib/src/index.js",
