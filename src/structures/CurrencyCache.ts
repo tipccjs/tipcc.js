@@ -1,3 +1,11 @@
+import { CryptoCurrency, ExchangeRate, FiatCurrency, TipccClient } from '..';
+import {
+  RESTGetAPICurrenciesCryptoCurrenciesResult,
+  RESTGetAPICurrenciesFiatsResult,
+  RESTGetAPICurrenciesRatesResult,
+  Routes,
+} from '@tipccjs/tipcc-api-types/v0';
+
 /**
  * A class extending Array holding a cache of objects with type T.
  *
@@ -5,26 +13,15 @@
  * @typeParam T - The object type this {@link CurrencyCache} will hold
  */
 export class CurrencyCache<T> extends Array {
-  private refreshFunction: () => T[] | Promise<T[]>;
+  public client: TipccClient;
 
   /**
    * Create a CurrencyCache.
-   * @param refreshFunction The refresh function which returns new values to insert to this cache
+   * @param client The client which instantiated this CurrencyCache
    */
-  constructor(refreshFunction: () => T[] | Promise<T[]>) {
+  constructor(client: TipccClient) {
     super();
-
-    this.refreshFunction = refreshFunction;
-  }
-
-  /**
-   * Refresh this CurrencyCache with new values received from refreshFunction.
-   */
-  public async refresh(): Promise<CurrencyCache<T>> {
-    const refreshedData = await this.refreshFunction();
-    this.splice(0, this.length, refreshedData);
-
-    return this;
+    this.client = client;
   }
 
   /**
@@ -35,5 +32,65 @@ export class CurrencyCache<T> extends Array {
     const found = this.find((i) => i.code === code);
     if (found) return found;
     return null;
+  }
+}
+
+/**
+ * A class extending {@link CurrencyCache} holding cryptocurrencies.
+ *
+ * @category Client utilities
+ */
+export class CryptocurrencyCache extends CurrencyCache<CryptoCurrency> {
+  public async refresh(): Promise<CryptocurrencyCache> {
+    const { cryptocurrencies } = (await this.client.REST.get(
+      Routes.currenciesCryptocurrencies(),
+    )) as RESTGetAPICurrenciesCryptoCurrenciesResult;
+
+    this.splice(
+      0,
+      this.length,
+      ...cryptocurrencies.map((c) => new CryptoCurrency(c)),
+    );
+
+    return this;
+  }
+}
+
+/**
+ * A class extending {@link CurrencyCache} holding fiats.
+ *
+ * @category Client utilities
+ */
+export class FiatCache extends CurrencyCache<FiatCurrency> {
+  public async refresh(): Promise<FiatCache> {
+    const { fiats } = (await this.client.REST.get(
+      Routes.currenciesFiats(),
+    )) as RESTGetAPICurrenciesFiatsResult;
+
+    this.splice(0, this.length, ...fiats.map((f) => new FiatCurrency(f)));
+
+    return this;
+  }
+}
+
+/**
+ * A class extending {@link CurrencyCache} holding exchange rates.
+ *
+ * @category Client utilities
+ */
+export class ExchangeRateCache extends CurrencyCache<ExchangeRate> {
+  public async refresh(): Promise<ExchangeRateCache> {
+    const { rates } = (await this.client.REST.get(
+      Routes.currenciesRates(),
+    )) as RESTGetAPICurrenciesRatesResult;
+    //return rates.map((r) => new ExchangeRate(r, this));
+
+    this.splice(
+      0,
+      this.length,
+      ...rates.map((r) => new ExchangeRate(r, this.client)),
+    );
+
+    return this;
   }
 }

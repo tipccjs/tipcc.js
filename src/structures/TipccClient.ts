@@ -1,13 +1,14 @@
 import { EventEmitter } from 'node:events';
 import { RequestHandler } from './RequestHandler';
 import { Transaction } from './Transaction';
-import { CurrencyCache } from './CurrencyCache';
-import { CryptoCurrency, FiatCurrency } from './Currency';
+import {
+  CryptocurrencyCache,
+  ExchangeRateCache,
+  FiatCache,
+} from './CurrencyCache';
 import { ExchangeRate } from './ExchangeRate';
 import { Wallet } from './Wallet';
 import {
-  RESTGetAPICurrenciesCryptoCurrenciesResult,
-  RESTGetAPICurrenciesFiatsResult,
   RESTGetAPIAccountTransactionResult,
   RESTGetAPIAccountTransactionsResult,
   RESTGetAPIAccountWalletResult,
@@ -37,19 +38,17 @@ export class TipccClient extends EventEmitter {
   /** The tip.cc API token this client uses */
   public token: string;
 
-  /** The {@link RequestHandler} this client uses */
+  /** The {@link RequestHandler} for this client */
   public REST: RequestHandler;
 
-  /** The {@link CurrencyCache} for cryptocurrencies */
-  public cryptos = new CurrencyCache<CryptoCurrency>(this._refreshCryptos);
+  /** The {@link CryptocurrencyCache} for this client */
+  public cryptos = new CryptocurrencyCache(this);
 
-  /** The {@link CurrencyCache} for fiat currencies */
-  public fiats = new CurrencyCache<FiatCurrency>(this._refreshFiats);
+  /** The {@link FiatCache} for this client */
+  public fiats = new FiatCache(this);
 
-  /** The {@link CurrencyCache} for exchange rates */
-  public exchangeRates = new CurrencyCache<ExchangeRate>(
-    this._refreshExchangeRates,
-  );
+  /** The {@link ExchangeRateCache} for this client */
+  public exchangeRates = new ExchangeRateCache(this);
 
   /** A boolean indicating whether the client is ready */
   public isReady = false;
@@ -178,32 +177,6 @@ export class TipccClient extends EventEmitter {
       clearTimeout(this.pollingTimeout);
       this.pollingTimeout = null;
     }
-  }
-
-  private async _refreshCryptos(): Promise<CryptoCurrency[]> {
-    const { cryptocurrencies } = (await this.REST.request(
-      'GET',
-      Routes.currenciesCryptocurrencies(),
-    )) as RESTGetAPICurrenciesCryptoCurrenciesResult;
-
-    return cryptocurrencies.map((c) => new CryptoCurrency(c));
-  }
-
-  private async _refreshFiats(): Promise<FiatCurrency[]> {
-    const { fiats } = (await this.REST.request(
-      'GET',
-      Routes.currenciesFiats(),
-    )) as RESTGetAPICurrenciesFiatsResult;
-
-    return fiats.map((c) => new FiatCurrency(c));
-  }
-
-  private async _refreshExchangeRates(): Promise<ExchangeRate[]> {
-    const { rates } = (await this.REST.request(
-      'GET',
-      Routes.currenciesRates(),
-    )) as RESTGetAPICurrenciesRatesResult;
-    return rates.map((r) => new ExchangeRate(r, this));
   }
 
   public on<K extends keyof Events>(s: K, f: (arg: Events[K]) => void): this {
