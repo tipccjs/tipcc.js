@@ -7,7 +7,7 @@ import {
   RESTPostAPITipBody,
   RESTPostAPITipResult,
   Routes,
-} from '@tipccjs/tipcc-api-types';
+} from '@tipccjs/tipcc-api-types/v0';
 import { Transaction } from '../Transaction';
 import { Cache } from '../Cache';
 import { EventEmitter } from 'stream';

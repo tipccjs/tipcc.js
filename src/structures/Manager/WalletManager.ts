@@ -7,7 +7,7 @@ import {
   RESTGetAPIAccountWalletResult,
   RESTGetAPIAccountWalletsResult,
   Routes,
-} from '@tipccjs/tipcc-api-types';
+} from '@tipccjs/tipcc-api-types/v0';
 
 export class WalletManager {
   public client: TipccClient;
