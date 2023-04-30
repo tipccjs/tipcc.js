@@ -69,7 +69,7 @@ export class TransactionManager extends EventEmitter {
   public async fetch(id: string, cache = true): Promise<Transaction | null> {
     if (cache && this.cache.has(id)) return this.cache.get(id)!;
     const { transaction } = (await this.client.REST.get(
-      Routes.accountWalletTransaction(id),
+      Routes.accountTransaction(id),
     )) as RESTGetAPIAccountTransactionResult;
     if (!transaction) return null;
     const tx = new Transaction(transaction, this.client);
@@ -84,7 +84,7 @@ export class TransactionManager extends EventEmitter {
 
   public async fetchAll(filter: RESTGetAPIAccountTransactionsQuery = {}) {
     const { transactions } = (await this.client.REST.get(
-      Routes.accountWalletTransactions(),
+      Routes.accountTransactions(),
       filter,
     )) as RESTGetAPIAccountTransactionsResult;
     return transactions.map((t) => new Transaction(t, this.client));
@@ -135,14 +135,11 @@ export class TransactionManager extends EventEmitter {
 
     do {
       try {
-        result = (await this.client.REST.get(
-          Routes.accountWalletTransactions(),
-          {
-            types: [...this._polling],
-            since: this._lastPoll.toISOString(),
-            until: now.toISOString(),
-          },
-        )) as RESTGetAPIAccountTransactionsResult;
+        result = (await this.client.REST.get(Routes.accountTransactions(), {
+          types: [...this._polling],
+          since: this._lastPoll.toISOString(),
+          until: now.toISOString(),
+        })) as RESTGetAPIAccountTransactionsResult;
 
         for (const tx of result.transactions)
           transactions.set(tx.id, new Transaction(tx, this.client));
