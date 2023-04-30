@@ -8,4 +8,6 @@ export * from './structures/TipccClient';
 export * from './structures/Transaction';
 export * from './structures/User';
 export * from './structures/Wallet';
+export * from './structures/managers/TransactionManager';
+export * from './structures/managers/WalletManager';
 export * from './utils/Bucket';

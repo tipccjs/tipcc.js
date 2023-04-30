@@ -5,8 +5,8 @@ import {
   ExchangeRateCache,
   FiatCache,
 } from './CurrencyCache';
-import { WalletManager } from './Manager/WalletManager';
-import { TransactionManager } from './Manager/TransactionManager';
+import { WalletManager } from './managers/WalletManager';
+import { TransactionManager } from './managers/TransactionManager';
 
 interface Emoji {
   name: string;
