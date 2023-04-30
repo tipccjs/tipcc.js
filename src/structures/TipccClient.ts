@@ -5,12 +5,6 @@ import {
   ExchangeRateCache,
   FiatCache,
 } from './CurrencyCache';
-import { ExchangeRate } from './ExchangeRate';
-
-import {
-  RESTGetAPICurrenciesRatesResult,
-  Routes,
-} from '@tipccjs/tipcc-api-types/v0';
 import { WalletManager } from './Manager/WalletManager';
 import { TransactionManager } from './Manager/TransactionManager';
 
