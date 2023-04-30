@@ -54,6 +54,15 @@ export class CryptocurrencyCache extends CurrencyCache<CryptoCurrency> {
 
     return this;
   }
+
+  public async fetch(
+    code: string,
+    cache = true,
+  ): Promise<CryptoCurrency | null> {
+    if (cache && this.get(code)) return this.get(code);
+    await this.refresh();
+    return this.get(code);
+  }
 }
 
 /**
@@ -70,6 +79,12 @@ export class FiatCache extends CurrencyCache<FiatCurrency> {
     this.splice(0, this.length, ...fiats.map((f) => new FiatCurrency(f)));
 
     return this;
+  }
+
+  public async fetch(code: string, cache = true): Promise<FiatCurrency | null> {
+    if (cache && this.get(code)) return this.get(code);
+    await this.refresh();
+    return this.get(code);
   }
 }
 

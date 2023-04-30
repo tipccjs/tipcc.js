@@ -132,6 +132,7 @@ export class RequestHandler {
 
           const rejectWithError = () => {
             if (response.data && response.data.error) {
+              console.error(response);
               reject(new Error(response.data.error));
             } else {
               reject(new Error(response.data.error ?? 'Unknown error'));
