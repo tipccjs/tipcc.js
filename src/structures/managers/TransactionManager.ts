@@ -12,30 +12,27 @@ import { Transaction } from '../Transaction';
 import { Cache } from '../Cache';
 import { EventEmitter } from 'stream';
 
-export interface RawValueTransaction {
+interface RawValueTransaction {
   recipient_s: string | string[];
   value: string | number | BigNumber;
   currencyCode: string;
 }
 
-export interface ValueTransaction {
+interface ValueTransaction {
   recipient_s: string | string[];
   valueRaw: string | number | BigNumber;
   currencyCode: string;
 }
 
-export interface Events {
+interface Events {
   tip: Transaction;
   withdrawal: Transaction;
   deposit: Transaction;
   ready: void;
 }
 
-export const isRawValueTransaction = (
-  payload: any,
-): payload is RawValueTransaction => payload && payload.valueRaw;
-export const isValueTransaction = (payload: any): payload is ValueTransaction =>
-  payload && payload.value;
+const isRawValueTransaction = (payload: any): payload is RawValueTransaction =>
+  payload && payload.valueRaw;
 
 export class TransactionManager extends EventEmitter {
   public client: TipccClient;
