@@ -21,9 +21,6 @@ export class Transaction {
   /** An instance of {@link Amount} for the fee of this transaction */
   public fee: Amount | null = null;
 
-  /** An instance of {@link Amount} for the USD value of this transaction */
-  public usdValue: Amount | null = null;
-
   /** The service in which this transaction took place */
   public service = 'discord' as const;
 
@@ -55,9 +52,6 @@ export class Transaction {
     this.type = payload.type;
     this.amount = new Amount(payload.amount, this.client);
     this.fee = payload.fee ? new Amount(payload.fee, this.client) : null;
-    this.usdValue = payload.usd_value
-      ? new Amount(payload.usd_value, this.client)
-      : null;
     this.service = payload.service;
     this.chatId = payload.chat_id ?? null;
     this.subchatId = payload.subchat_id ?? null;
