@@ -1,15 +1,10 @@
 import { EventEmitter } from 'node:events';
 import { RequestHandler } from './RequestHandler';
-import { CurrencyCache } from './CurrencyCache';
-import { CryptoCurrency, FiatCurrency } from './Currency';
-import { ExchangeRate } from './ExchangeRate';
-
 import {
-  RESTGetAPICurrenciesCryptoCurrenciesResult,
-  RESTGetAPICurrenciesFiatsResult,
-  RESTGetAPICurrenciesRatesResult,
-  Routes,
-} from '@tipccjs/tipcc-api-types/v0';
+  CryptocurrencyCache,
+  ExchangeRateCache,
+  FiatCache,
+} from './CurrencyCache';
 import { WalletManager } from './Manager/WalletManager';
 import { TransactionManager } from './Manager/TransactionManager';
 
@@ -27,7 +22,7 @@ export class TipccClient extends EventEmitter {
   /** The tip.cc API token this client uses */
   public token: string;
 
-  /** The {@link RequestHandler} this client uses */
+  /** The {@link RequestHandler} for this client */
   public REST: RequestHandler;
 
   /** The {@link WalletManager} for this client */
@@ -36,14 +31,14 @@ export class TipccClient extends EventEmitter {
   /** The {@link TransactionManager} for this client */
   public transactions: TransactionManager;
 
-  /** The {@link CurrencyCache} for cryptocurrencies */
-  public cryptos: CurrencyCache<CryptoCurrency>;
+  /** The {@link CryptocurrencyCache} for this client */
+  public cryptos: CryptocurrencyCache;
 
-  /** The {@link CurrencyCache} for fiat currencies */
-  public fiats: CurrencyCache<FiatCurrency>;
+  /** The {@link FiatCache} for this client */
+  public fiats: FiatCache;
 
-  /** The {@link CurrencyCache} for exchange rates */
-  public exchangeRates: CurrencyCache<ExchangeRate>;
+  /** The {@link ExchangeRateCache} for this client */
+  public exchangeRates: ExchangeRateCache;
 
   /** A boolean indicating whether the client is ready */
   public isReady = false;
@@ -86,9 +81,9 @@ export class TipccClient extends EventEmitter {
     this.transactions = new TransactionManager({
       client: this,
     });
-    this.cryptos = new CurrencyCache(this._refreshCryptos);
-    this.fiats = new CurrencyCache(this._refreshFiats);
-    this.exchangeRates = new CurrencyCache(this._refreshExchangeRates);
+    this.cryptos = new CryptocurrencyCache(this);
+    this.fiats = new FiatCache(this);
+    this.exchangeRates = new ExchangeRateCache(this);
 
     this.token = token;
     this.REST = new RequestHandler(token, {
@@ -125,31 +120,5 @@ export class TipccClient extends EventEmitter {
   /** A map for emojis which should be used for formatted amounts */
   public set emojis(emojis: Emoji[]) {
     this._emojis = new Map(emojis.map(({ name, id }) => [name, id]));
-  }
-
-  private async _refreshCryptos(): Promise<CryptoCurrency[]> {
-    const { cryptocurrencies } = (await this.REST.request(
-      'GET',
-      Routes.currenciesCryptocurrencies(),
-    )) as RESTGetAPICurrenciesCryptoCurrenciesResult;
-
-    return cryptocurrencies.map((c) => new CryptoCurrency(c));
-  }
-
-  private async _refreshFiats(): Promise<FiatCurrency[]> {
-    const { fiats } = (await this.REST.request(
-      'GET',
-      Routes.currenciesFiats(),
-    )) as RESTGetAPICurrenciesFiatsResult;
-
-    return fiats.map((c) => new FiatCurrency(c));
-  }
-
-  private async _refreshExchangeRates(): Promise<ExchangeRate[]> {
-    const { rates } = (await this.REST.request(
-      'GET',
-      Routes.currenciesRates(),
-    )) as RESTGetAPICurrenciesRatesResult;
-    return rates.map((r) => new ExchangeRate(r, this));
   }
 }
