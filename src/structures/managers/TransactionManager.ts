@@ -11,6 +11,7 @@ import {
 import { Transaction } from '../Transaction';
 import { Cache } from '../Cache';
 import { EventEmitter } from 'stream';
+import { CacheSet } from '../../utils/CacheSet';
 
 interface ValueTransaction {
   recipient_s: string | string[];
@@ -50,6 +51,10 @@ export class TransactionManager extends EventEmitter {
   private _maxPollingRetries = 5;
 
   private _pollingRetries = 0;
+
+  private _processedTransactions: CacheSet<string> = new CacheSet(
+    24 * 60 * 60 * 1000,
+  );
 
   public constructor(payload: {
     client: TipccClient;
@@ -165,12 +170,20 @@ export class TransactionManager extends EventEmitter {
         await this.client.cryptos.refresh();
         refreshedCurrencies = true;
       }
-      if (this.client.cryptos.get(transaction.amount.currencyCode))
+      if (this.client.cryptos.get(transaction.amount.currencyCode)) {
+        if (this._processedTransactions.has(transaction.id)) {
+          console.warn(
+            `Event emittion cancelled: Transaction ${transaction.id} has already been emitted`,
+          );
+          continue;
+        }
+        this._processedTransactions.add(transaction.id);
         this.emit(transaction.type, transaction);
-      else
+      } else {
         console.warn(
           `Event emittion cancelled: Unknown currency code ${transaction.amount.currencyCode} for transaction ${transaction.id}`,
         );
+      }
     }
 
     this._lastPoll = now;
