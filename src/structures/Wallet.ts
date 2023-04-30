@@ -1,6 +1,8 @@
 import { Amount } from './Amount';
 import type { APIWallet } from '@tipccjs/tipcc-api-types/v0';
 import { TipccClient } from './TipccClient';
+import { Currency } from './Currency';
+import { ExchangeRate } from './ExchangeRate';
 
 /**
  * A class for storing an API wallet.
@@ -13,6 +15,18 @@ export class Wallet {
 
   /** The currency name */
   public name: string;
+
+  /** The currency */
+  public get currency(): Currency | null {
+    const currency = this.client?.cryptos.get(this.code);
+    return currency ? currency : null;
+  }
+
+  /** The exchange rate of this wallet's currency */
+  public get exchangeRate(): ExchangeRate | null {
+    const exchangeRate = this.client?.exchangeRates.get(this.code);
+    return exchangeRate ? exchangeRate : null;
+  }
 
   /** The balance of this wallet */
   public balance: Amount;
