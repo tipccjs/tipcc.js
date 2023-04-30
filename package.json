@@ -1,16 +1,42 @@
 {
   "name": "tipcc.js",
   "version": "0.0.2",
-  "description": "# tip.cc API Client",
+  "description": "tip.cc API Client",
   "main": "lib/src/index.js",
   "types": "lib/src/index.d.ts",
   "files": [
     "lib/**/*",
-    "LICENSE",
     "README.md",
-    "package.json",
-    "tsconfig.json",
-    "package-lock.json"
+    "LICENSE",
+    "package.json"
+  ],
+  "homepage": "https://tipccjs.org/",
+  "bugs": {
+    "url": "https://github.com/tipccjs/tipcc.js/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tipccjs/tipcc.js"
+  },
+  "keywords": [
+    "tip.cc",
+    "tipcc",
+    "tipcc.js",
+    "tipccjs",
+    "tipcc-api",
+    "tipcc-client",
+    "tipcc-api-client"
+  ],
+  "contributors": [
+    {
+      "name": "Walledgarden",
+      "url": "https://github.com/Walledgarden"
+    },
+    {
+      "name": "ZeroWave",
+      "url": "https://github.com/ZeroWave022"
+    }
   ],
   "scripts": {
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
@@ -21,9 +47,6 @@
     "build": "tsc",
     "build:docs": "typedoc"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.57.0",
     "@typescript-eslint/parser": "^5.57.0",
