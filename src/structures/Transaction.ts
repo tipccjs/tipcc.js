@@ -59,8 +59,8 @@ export class Transaction {
       ? new Amount(payload.usd_value, this.client)
       : null;
     this.service = payload.service;
-    this.chatId = payload.chat_id;
-    this.subchatId = payload.subchat_id;
+    this.chatId = payload.chat_id ?? null;
+    this.subchatId = payload.subchat_id ?? null;
     this.sender = new User(payload.sender);
     this.recipient = new User(payload.recipient);
     this.created = new Date(payload.created);
