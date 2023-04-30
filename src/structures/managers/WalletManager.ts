@@ -2,7 +2,6 @@ import BigNumber from 'bignumber.js';
 import { Wallet } from '../Wallet';
 import { TipccClient } from '../TipccClient';
 import { Cache } from '../Cache';
-import { FiatCurrency } from '../Currency';
 import {
   RESTGetAPIAccountWalletResult,
   RESTGetAPIAccountWalletsResult,
@@ -67,12 +66,10 @@ export class WalletManager {
 
     let total = BigNumber(0);
     for (const wallet of this.cache.values()) {
-      if (!wallet.usdValue) continue;
-      total = total.plus(wallet.usdValue?.valueRaw);
+      if (!wallet.balance.usdValue) continue;
+      total = total.plus(wallet.balance.usdValue);
     }
 
-    if (!this.client.fiats.get('USD')) this.client.fiats.refresh();
-
-    return (this.client.fiats.get('USD') as FiatCurrency).convertFromRaw(total);
+    return total;
   }
 }

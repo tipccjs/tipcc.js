@@ -39,7 +39,7 @@ export class Amount {
       this.client?.exchangeRates.get(this.currency.code) ?? null;
     if (!exchangeRate) return null;
     if (!this.value) return null;
-    return this.currency.convertByExchangeRate(this.value, exchangeRate);
+    return this.currency.convertByExchangeRate(this.valueRaw, exchangeRate);
   }
 
   /** The currency emoji (Discord Formatted) */
@@ -76,7 +76,7 @@ export class Amount {
       currency.format.units
         .filter((u) => u.min)
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        .find((u) => BigNumber(u.min!).lte(this.valueRaw)) ??
+        .find((u) => BigNumber(u.min ?? 0).lte(this.valueRaw)) ??
       currency.format.units[0];
 
     const usdValue = this.usdValue;
@@ -86,16 +86,18 @@ export class Amount {
       .toFixed(unit.optionalDecimals ?? unit.scale)
       .replace(/\.?0+$/, '');
 
+    const baseString = `${emoji ? `${emoji} ` : ''}**${preparedValue} ${
+      unit.singular
+    }**`;
+
     if (includeUsd && usdValue) {
       const displayedUsd = usdValue.lt(0.01)
         ? usdValue.toFixed(4)
         : usdValue.toFixed(2);
 
-      return `**${emoji ? `${emoji} ` : ''} ${preparedValue} ${
-        unit.singular
-      } **${`(≈ $${displayedUsd})`}`;
+      return baseString + ` (≈ $${displayedUsd})`;
     } else {
-      return `**${emoji ? `${emoji} ` : ''} ${preparedValue} ${unit.singular}`;
+      return baseString;
     }
   }
 

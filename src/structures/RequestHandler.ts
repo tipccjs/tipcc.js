@@ -70,6 +70,16 @@ export class RequestHandler {
     }
   }
 
+  private _rejectResponse(response: any, rejectFunc: (e: Error) => void) {
+    if (response.data && response.data.error) {
+      console.error('tip.cc API request failed. Response was:');
+      console.log(response);
+      rejectFunc(new Error(response.data.error));
+    } else {
+      rejectFunc(new Error(response.data.error ?? 'Unknown error'));
+    }
+  }
+
   /**
    * A shortcut for a GET request.
    * @param route The route to request
@@ -130,15 +140,6 @@ export class RequestHandler {
         .then((response) => {
           this._parseRateLimitHeaders(route, response.headers);
 
-          const rejectWithError = () => {
-            if (response.data && response.data.error) {
-              console.error(response);
-              reject(new Error(response.data.error));
-            } else {
-              reject(new Error(response.data.error ?? 'Unknown error'));
-            }
-          };
-
           const retryRequest = () => {
             if (response.headers['retry-after']) {
               setTimeout(() => {
@@ -147,7 +148,7 @@ export class RequestHandler {
                   .catch(reject);
               }, +response.headers['retry-after']);
             } else {
-              //  Retry immediately if no retry-after header
+              // Retry immediately if no retry-after header
               this.request(method, route, payload, requestOptions)
                 .then(resolve)
                 .catch(reject);
@@ -159,7 +160,7 @@ export class RequestHandler {
           } else if (response.status === 429) {
             retryRequest();
           } else {
-            rejectWithError();
+            this._rejectResponse(response, reject);
           }
         });
     });

@@ -31,9 +31,6 @@ export class Wallet {
   /** The balance of this wallet */
   public balance: Amount;
 
-  /** The USD value of this wallet's balance */
-  public usdValue: Amount | null = null;
-
   /** The client that instantiated this */
   public client: TipccClient | undefined;
 
@@ -46,8 +43,5 @@ export class Wallet {
     this.code = payload.code;
     this.name = payload.name;
     this.balance = new Amount(payload.balance, this.client);
-    this.usdValue = payload.usd_value
-      ? new Amount(payload.usd_value, this.client)
-      : null;
   }
 }
