@@ -12,13 +12,13 @@ import { Transaction } from '../Transaction';
 import { Cache } from '../Cache';
 import { EventEmitter } from 'stream';
 
-interface RawValueTransaction {
+interface ValueTransaction {
   recipient_s: string | string[];
   value: string | number | BigNumber;
   currencyCode: string;
 }
 
-interface ValueTransaction {
+interface RawValueTransaction {
   recipient_s: string | string[];
   valueRaw: string | number | BigNumber;
   currencyCode: string;
@@ -32,7 +32,7 @@ interface Events {
 }
 
 const isRawValueTransaction = (payload: any): payload is RawValueTransaction =>
-  payload && payload.valueRaw;
+  payload && typeof payload.valueRaw !== 'undefined';
 
 export class TransactionManager extends EventEmitter {
   public client: TipccClient;
@@ -96,16 +96,23 @@ export class TransactionManager extends EventEmitter {
     const recipients = Array.isArray(payload.recipient_s)
       ? payload.recipient_s
       : [payload.recipient_s];
-    const value = BigNumber(
-      isRawValueTransaction(payload) ? payload.value : payload.valueRaw,
-    ).toFixed(40);
-    const currencyCode = payload.currencyCode;
+
+    const currency = await this.client.cryptos.fetch(payload.currencyCode);
+    if (!currency) throw new Error('Invalid currency code.');
+
+    const value = (
+      isRawValueTransaction(payload)
+        ? new BigNumber(payload.valueRaw)
+        : new BigNumber(payload.value).shiftedBy(currency.format.scale)
+    ).toFixed(0);
 
     const tx = (await this.client.REST.post(Routes.tips(), {
-      recipients: recipients,
+      ...(Array.isArray(payload.recipient_s)
+        ? { recipients }
+        : { recipient: recipients[0] }),
       amount: {
         value,
-        currency: currencyCode,
+        currency: currency.code,
       },
       service: 'discord',
     } as RESTPostAPITipBody)) as RESTPostAPITipResult;
