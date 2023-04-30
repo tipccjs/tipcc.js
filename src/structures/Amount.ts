@@ -86,16 +86,18 @@ export class Amount {
       .toFixed(unit.optionalDecimals ?? unit.scale)
       .replace(/\.?0+$/, '');
 
+    const baseString = `${emoji ? `${emoji} ` : ''}**${preparedValue} ${
+      unit.singular
+    }**`;
+
     if (includeUsd && usdValue) {
       const displayedUsd = usdValue.lt(0.01)
         ? usdValue.toFixed(4)
         : usdValue.toFixed(2);
 
-      return `**${emoji ? `${emoji} ` : ''} ${preparedValue} ${
-        unit.singular
-      } **${`(≈ $${displayedUsd})`}`;
+      return baseString + ` (≈ $${displayedUsd})`;
     } else {
-      return `**${emoji ? `${emoji} ` : ''} ${preparedValue} ${unit.singular}`;
+      return baseString;
     }
   }
 
