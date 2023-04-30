@@ -1,16 +1,14 @@
 {
   "name": "tipcc.js",
   "version": "0.0.2",
-  "description": "# tip.cc API Client",
+  "description": "tip.cc API Client",
   "main": "lib/src/index.js",
   "types": "lib/src/index.d.ts",
   "files": [
     "lib/**/*",
-    "LICENSE",
     "README.md",
-    "package.json",
-    "tsconfig.json",
-    "package-lock.json"
+    "LICENSE",
+    "package.json"
   ],
   "scripts": {
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",

@@ -132,3 +132,4 @@ dist
 /docs
 /lib
 test.*
+/.vscode
