@@ -12,32 +12,27 @@ import { Transaction } from '../Transaction';
 import { Cache } from '../Cache';
 import { EventEmitter } from 'stream';
 
-export interface ValueTransaction {
+interface RawValueTransaction {
   recipient_s: string | string[];
   value: string | number | BigNumber;
   currencyCode: string;
 }
 
-export interface RawValueTransaction {
+interface ValueTransaction {
   recipient_s: string | string[];
   valueRaw: string | number | BigNumber;
   currencyCode: string;
 }
 
-export interface Events {
+interface Events {
   tip: Transaction;
   withdrawal: Transaction;
   deposit: Transaction;
   ready: void;
 }
 
-export const isRawValueTransaction = (
-  payload: any,
-): payload is RawValueTransaction =>
-  payload && typeof payload.valueRaw !== 'undefined';
-
-export const isValueTransaction = (payload: any): payload is ValueTransaction =>
-  payload && typeof payload.value !== 'undefined';
+const isRawValueTransaction = (payload: any): payload is RawValueTransaction =>
+  payload && payload.valueRaw;
 
 export class TransactionManager extends EventEmitter {
   public client: TipccClient;
@@ -101,23 +96,16 @@ export class TransactionManager extends EventEmitter {
     const recipients = Array.isArray(payload.recipient_s)
       ? payload.recipient_s
       : [payload.recipient_s];
-
-    const currency = await this.client.cryptos.fetch(payload.currencyCode);
-    if (!currency) throw new Error('Invalid currency code.');
-
-    const value = (
-      isRawValueTransaction(payload)
-        ? new BigNumber(payload.valueRaw)
-        : new BigNumber(payload.value).shiftedBy(currency.format.scale)
-    ).toFixed(0);
+    const value = BigNumber(
+      isRawValueTransaction(payload) ? payload.value : payload.valueRaw,
+    ).toFixed(40);
+    const currencyCode = payload.currencyCode;
 
     const tx = (await this.client.REST.post(Routes.tips(), {
-      ...(Array.isArray(payload.recipient_s)
-        ? { recipients }
-        : { recipient: recipients[0] }),
+      recipients: recipients,
       amount: {
         value,
-        currency: currency.code,
+        currency: currencyCode,
       },
       service: 'discord',
     } as RESTPostAPITipBody)) as RESTPostAPITipResult;
