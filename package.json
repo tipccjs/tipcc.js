@@ -2,8 +2,8 @@
   "name": "tipcc.js",
   "version": "1.0.0",
   "description": "tip.cc API Client",
-  "main": "lib/src/index.js",
-  "types": "lib/src/index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "files": [
     "lib/**/*",
     "README.md",
