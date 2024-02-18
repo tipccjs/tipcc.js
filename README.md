@@ -2,7 +2,7 @@
 
 Welcome to the tip.cc API Client npm package!
 
-# Installation
+## Installation
 
 Simply create an npm project if you don't have an already, and install the package.
 
@@ -11,7 +11,7 @@ npm init
 npm i tipcc.js
 ```
 
-# Getting Started
+## Getting Started
 
 > Tip: Want to get started without an introduction? Check out our [documentation](https://tipccjs.org/).
 
@@ -59,6 +59,8 @@ client.on('ready', async () => {
 
 ## Transactions
 
+### Events
+
 To receive transactions as events, use [TransactionManager](https://tipccjs.org/classes/TransactionManager)'s events:
 
 ```js
@@ -70,6 +72,8 @@ client.transactions.on('tip', (transaction) => {
   console.log(`Received ${readableAmount} ${currencyCode} from ${sender}`);
 });
 ```
+
+### Fetching
 
 You can also get a single or many transactions by id:
 
@@ -96,6 +100,27 @@ client.on('ready', async () => {
 
 Using no filter will get all transactions for the bot/user.
 This is not recommended, unless you know what you're doing.
+
+### Creating (sending)
+
+You can send a transaction to one or more users:
+
+```js
+client.on('ready', async () => {
+  const transaction = await client.transactions.create({
+    recipient_s: ['discord-id-here'],
+    value: '0.1',
+    currencyCode: 'BTC',
+  });
+
+  const amount = transaction[0].amount;
+
+  console.log(`${amount.value} ${amount.currencyCode} successfully sent to ${transaction[0].recipient.username}`,);
+});
+```
+
+Notice that you can choose between using a `rawValue` or `value` when sending a transaction.
+The `value` will automatically get converted, while `rawValue` assumes you have done this conversion yourself.
 
 ## Exchange rates
 
