@@ -115,7 +115,7 @@ client.on('ready', async () => {
 
   const amount = transaction[0].amount;
 
-  console.log(`${amount.value} ${amount.currencyCode} successfully sent to ${transaction[0].recipient.username}`,);
+  console.log(`${amount.value} ${amount.currencyCode} successfully sent to ${transaction[0].recipient.username}`);
 });
 ```
 
